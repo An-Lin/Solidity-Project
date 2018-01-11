@@ -9,8 +9,8 @@ contract TurnBasedGame {
 
     }
 
-    event GameHasBegun(uint gameId);
-    event GameHasEnded(string winnerAlias, uint gameJackPot);
+    event GameSessionCreated(uint gameId);
+    event GameSessionEnded(string winnerAlias, uint gameJackPot);
 
     struct Player {
         address player;
@@ -24,7 +24,6 @@ contract TurnBasedGame {
         uint id;
     }
 
-
     function startGame(string name) internal {
         require(msg.value > 0);
         /*
@@ -34,6 +33,11 @@ contract TurnBasedGame {
         gameIdToGame[gamesPlayed] = game;
         gameIdToGame[gamesPlayed].players.push(Player(msg.sender, name));
         addressToGameId[msg.sender] = gamesPlayed;
+        
+        //notify game created
+        GameSessionCreated(gamesPlayed);
+        //increment gameId
+        gamesPlayed++;
     }
 
     function getGameId() internal view returns (uint){
