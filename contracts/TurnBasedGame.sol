@@ -1,10 +1,9 @@
 pragma solidity ^0.4.18;
 
 contract TurnBasedGame {
-    mapping(uint => Game) private unMatchedGames;
-    mapping(address => uint) private addressToGameId;
-    mapping(uint => Game) private gameIdToGame;
-    uint private gamesPlayed = 0;
+    mapping(address => uint) internal addressToGameId;
+    mapping(uint => Game) internal gameIdToGame;
+    uint internal gamesPlayed = 0;
 
     function TurnBasedGame() public {
 
