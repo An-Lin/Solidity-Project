@@ -1,7 +1,9 @@
 //I design this contract to be first come first play, player do not get to choose who he is playing against. This will probably work but let me know if you think there is better way to implment this
 
-
 pragma solidity ^0.4.18;
+
+import './TurnBasedGame.sol';
+
 contract RockPaperScissor is TurnBasedGame {
 
 	//player construct
