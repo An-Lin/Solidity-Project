@@ -1,7 +1,6 @@
 pragma solidity ^0.4.18;
 
 contract TurnBasedGame {
-    enum GameState { Begin, Locked, Over }
     mapping(uint => Game) private unMatchedGames;
     mapping(address => uint) private addressToGameId;
     mapping(uint => Game) private gameIdToGame;
@@ -21,7 +20,7 @@ contract TurnBasedGame {
 
     struct Game {
         Player[] players;
-        GameState state;
+        uint gameState;
         uint jackpot;
         uint id;
     }
