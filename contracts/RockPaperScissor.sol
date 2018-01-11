@@ -2,9 +2,9 @@
 
 
 pragma solidity ^0.4.18;
-contract RockPaperScissor {
-    
-	//player construct 
+contract RockPaperScissor is TurnBasedGame {
+
+	//player construct
     struct PlayerStruct {
         bytes32 encryptedOption;
         address addr;
@@ -14,11 +14,11 @@ contract RockPaperScissor {
     PlayerStruct public player_one;
     PlayerStruct public player_two;
 
-	
+
 	function RockPaperScissor() public{
 	    reset();
 	}
-	
+
 	function play(bytes32 _encryptedOption) public {
 	    //Scenario #1 First player enter the game
 	    if(player_one.addr == address(0) && player_two.addr == address(0)){
@@ -33,23 +33,23 @@ contract RockPaperScissor {
 	        //Event broadcast player can reveal now
 	    }
 	}
-	
+
 	function reveal(bytes32 _encryptedOption) public {
 
 		//first check if both player properly populated with address and encryptedOption
-		require()
+		/*require();*/
 
 	    //decode the secret option
 
 	    //compare the option and determin winner
 
 	    //brodcast the result
-	    event()
+	    /*event();*/
 
 	    reset();
 
 	}
-	
+
 	//We call this function to reset the state of the contract
 	function reset() private{
 	    player_one = PlayerStruct("",address(0));

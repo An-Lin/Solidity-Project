@@ -15,8 +15,8 @@ contract TurnBasedGame {
     event GameHasEnded(string winnerAlias, uint gameJackPot);
 
     struct Player {
-        address player1;
-        string player1Alias;
+        address player;
+        string playerAlias;
     }
 
     struct Game {
@@ -42,13 +42,5 @@ contract TurnBasedGame {
         uint id = addressToGameId[msg.sender];
         require(id != 0);
         return id;
-    }
-
-    function getGame() internal view returns (Game){
-        return gameIdToGame[getGameId()];
-    }
-
-    function test() internal {
-        getGame().players.push(Player(msg.sender, "name"));
     }
 }

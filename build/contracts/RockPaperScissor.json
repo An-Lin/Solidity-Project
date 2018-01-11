@@ -1,0 +1,1469 @@
+{
+  "contractName": "RockPaperScissor",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "player_one",
+      "outputs": [
+        {
+          "name": "encryptedOption",
+          "type": "bytes32"
+        },
+        {
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_encryptedOption",
+          "type": "bytes32"
+        }
+      ],
+      "name": "reveal",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "player_two",
+      "outputs": [
+        {
+          "name": "encryptedOption",
+          "type": "bytes32"
+        },
+        {
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_encryptedOption",
+          "type": "bytes32"
+        }
+      ],
+      "name": "play",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "bytecode": "0x6060604052341561000f57600080fd5b61002a61002f6401000000000261034f176401000000009004565b610148565b604080519081016040528060008019168152602001600073ffffffffffffffffffffffffffffffffffffffff16815250600080820151816000019060001916905560208201518160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550905050604080519081016040528060008019168152602001600073ffffffffffffffffffffffffffffffffffffffff1681525060026000820151816000019060001916905560208201518160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550905050565b610494806101576000396000f300606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680635000b11f14610067578063701fd0f1146100cb5780637efccf15146100f2578063c7a1865b14610156575b600080fd5b341561007257600080fd5b61007a61017d565b6040518083600019166000191681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390f35b34156100d657600080fd5b6100f06004808035600019169060200190919050506101af565b005b34156100fd57600080fd5b6101056101ba565b6040518083600019166000191681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390f35b341561016157600080fd5b61017b6004808035600019169060200190919050506101ec565b005b60008060000154908060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905082565b6101b761034f565b50565b60028060000154908060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905082565b600073ffffffffffffffffffffffffffffffffffffffff16600060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614801561029e5750600073ffffffffffffffffffffffffffffffffffffffff16600260010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16145b156102f95733600060010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508060008001816000191690555061034c565b33600260010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600260000181600019169055505b50565b604080519081016040528060008019168152602001600073ffffffffffffffffffffffffffffffffffffffff16815250600080820151816000019060001916905560208201518160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550905050604080519081016040528060008019168152602001600073ffffffffffffffffffffffffffffffffffffffff1681525060026000820151816000019060001916905560208201518160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055509050505600a165627a7a723058202da4c987939742720cbc36d596049eb897bce6772ca27fc11dc0dea9a1b3d9300029",
+  "deployedBytecode": "0x606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680635000b11f14610067578063701fd0f1146100cb5780637efccf15146100f2578063c7a1865b14610156575b600080fd5b341561007257600080fd5b61007a61017d565b6040518083600019166000191681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390f35b34156100d657600080fd5b6100f06004808035600019169060200190919050506101af565b005b34156100fd57600080fd5b6101056101ba565b6040518083600019166000191681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390f35b341561016157600080fd5b61017b6004808035600019169060200190919050506101ec565b005b60008060000154908060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905082565b6101b761034f565b50565b60028060000154908060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905082565b600073ffffffffffffffffffffffffffffffffffffffff16600060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614801561029e5750600073ffffffffffffffffffffffffffffffffffffffff16600260010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16145b156102f95733600060010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508060008001816000191690555061034c565b33600260010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600260000181600019169055505b50565b604080519081016040528060008019168152602001600073ffffffffffffffffffffffffffffffffffffffff16815250600080820151816000019060001916905560208201518160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550905050604080519081016040528060008019168152602001600073ffffffffffffffffffffffffffffffffffffffff1681525060026000820151816000019060001916905560208201518160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055509050505600a165627a7a723058202da4c987939742720cbc36d596049eb897bce6772ca27fc11dc0dea9a1b3d9300029",
+  "sourceMap": "226:1280:0:-;;;463:52;;;;;;;;504:7;:5;;;;;:7;;;:::i;:::-;226:1280;;1382:122;1426:27;;;;;;;;;;;;;;;;;1450:1;1426:27;;;;;1413:10;:40;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1473:27;;;;;;;;;;;;;;;;;1497:1;1473:27;;;;;1460:10;:40;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1382:122::o;226:1280::-;;;;;;;",
+  "deployedSourceMap": "226:1280:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;392:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1023:296;;;;;;;;;;;;;;;;;;;;;;;;;;;;;428:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;518:502;;;;;;;;;;;;;;;;;;;;;;;;;;;;;392:30;;;;;;;;;;;;;;;;;;;;;;;:::o;1023:296::-;1307:7;:5;:7::i;:::-;1023:296;:::o;428:30::-;;;;;;;;;;;;;;;;;;;;;;;:::o;518:502::-;649:1;622:29;;:10;:15;;;;;;;;;;;;:29;;;:62;;;;;682:1;655:29;;:10;:15;;;;;;;;;;;;:29;;;622:62;619:398;;;712:10;696;:15;;;:26;;;;;;;;;;;;;;;;;;762:16;733:10;:26;;:45;;;;;;;619:398;;;893:10;877;:15;;;:26;;;;;;;;;;;;;;;;;;943:16;914:10;:26;;:45;;;;;;;619:398;518:502;:::o;1382:122::-;1426:27;;;;;;;;;;;;;;;;;1450:1;1426:27;;;;;1413:10;:40;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1473:27;;;;;;;;;;;;;;;;;1497:1;1473:27;;;;;1460:10;:40;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1382:122::o",
+  "source": "//I design this contract to be first come first play, player do not get to choose who he is playing against. This will probably work but let me know if you think there is better way to implment this\n\n\npragma solidity ^0.4.18;\ncontract RockPaperScissor {\n\n\t//player construct\n    struct PlayerStruct {\n        bytes32 encryptedOption;\n        address addr;\n    }\n\n    //delcare two player\n    PlayerStruct public player_one;\n    PlayerStruct public player_two;\n\n\n\tfunction RockPaperScissor() public{\n\t    reset();\n\t}\n\n\tfunction play(bytes32 _encryptedOption) public {\n\t    //Scenario #1 First player enter the game\n\t    if(player_one.addr == address(0) && player_two.addr == address(0)){\n\t        player_one.addr=msg.sender;\n\t        player_one.encryptedOption = _encryptedOption;\n\t    }\n\t    //Scenario #2 Second player join in, signal the player to reveal\n\t    else{\n\t        player_two.addr=msg.sender;\n\t        player_two.encryptedOption = _encryptedOption;\n\n\t        //Event broadcast player can reveal now\n\t    }\n\t}\n\n\tfunction reveal(bytes32 _encryptedOption) public {\n\n\t\t//first check if both player properly populated with address and encryptedOption\n\t\t/*require();*/\n\n\t    //decode the secret option\n\n\t    //compare the option and determin winner\n\n\t    //brodcast the result\n\t    /*event();*/\n\n\t    reset();\n\n\t}\n\n\t//We call this function to reset the state of the contract\n\tfunction reset() private{\n\t    player_one = PlayerStruct(\"\",address(0));\n\t    player_two = PlayerStruct(\"\",address(0));\n\t}\n}\n",
+  "sourcePath": "/home/cashlion/Desktop/Solidity-Project/contracts/RockPaperScissor.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/home/cashlion/Desktop/Solidity-Project/contracts/RockPaperScissor.sol",
+      "exportedSymbols": {
+        "RockPaperScissor": [
+          97
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 1,
+        "name": "PragmaDirective",
+        "src": "201:24:0"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            97
+          ],
+          "name": "RockPaperScissor",
+          "scope": 98
+        },
+        "children": [
+          {
+            "attributes": {
+              "canonicalName": "RockPaperScissor.PlayerStruct",
+              "name": "PlayerStruct",
+              "scope": 97,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "encryptedOption",
+                  "scope": 6,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "bytes32",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "bytes32",
+                      "type": "bytes32"
+                    },
+                    "id": 2,
+                    "name": "ElementaryTypeName",
+                    "src": "309:7:0"
+                  }
+                ],
+                "id": 3,
+                "name": "VariableDeclaration",
+                "src": "309:23:0"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "addr",
+                  "scope": 6,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "address",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "address",
+                      "type": "address"
+                    },
+                    "id": 4,
+                    "name": "ElementaryTypeName",
+                    "src": "342:7:0"
+                  }
+                ],
+                "id": 5,
+                "name": "VariableDeclaration",
+                "src": "342:12:0"
+              }
+            ],
+            "id": 6,
+            "name": "StructDefinition",
+            "src": "279:82:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "player_one",
+              "scope": 97,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "struct RockPaperScissor.PlayerStruct storage ref",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "PlayerStruct",
+                  "referencedDeclaration": 6,
+                  "type": "struct RockPaperScissor.PlayerStruct storage pointer"
+                },
+                "id": 7,
+                "name": "UserDefinedTypeName",
+                "src": "392:12:0"
+              }
+            ],
+            "id": 8,
+            "name": "VariableDeclaration",
+            "src": "392:30:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "player_two",
+              "scope": 97,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "struct RockPaperScissor.PlayerStruct storage ref",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "PlayerStruct",
+                  "referencedDeclaration": 6,
+                  "type": "struct RockPaperScissor.PlayerStruct storage pointer"
+                },
+                "id": 9,
+                "name": "UserDefinedTypeName",
+                "src": "428:12:0"
+              }
+            ],
+            "id": 10,
+            "name": "VariableDeclaration",
+            "src": "428:30:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": true,
+              "modifiers": [
+                null
+              ],
+              "name": "RockPaperScissor",
+              "payable": false,
+              "scope": 97,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 11,
+                "name": "ParameterList",
+                "src": "488:2:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 12,
+                "name": "ParameterList",
+                "src": "497:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            null
+                          ],
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                null
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 96,
+                              "type": "function ()",
+                              "value": "reset"
+                            },
+                            "id": 13,
+                            "name": "Identifier",
+                            "src": "504:5:0"
+                          }
+                        ],
+                        "id": 14,
+                        "name": "FunctionCall",
+                        "src": "504:7:0"
+                      }
+                    ],
+                    "id": 15,
+                    "name": "ExpressionStatement",
+                    "src": "504:7:0"
+                  }
+                ],
+                "id": 16,
+                "name": "Block",
+                "src": "497:18:0"
+              }
+            ],
+            "id": 17,
+            "name": "FunctionDefinition",
+            "src": "463:52:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "play",
+              "payable": false,
+              "scope": 97,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_encryptedOption",
+                      "scope": 65,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 18,
+                        "name": "ElementaryTypeName",
+                        "src": "532:7:0"
+                      }
+                    ],
+                    "id": 19,
+                    "name": "VariableDeclaration",
+                    "src": "532:24:0"
+                  }
+                ],
+                "id": 20,
+                "name": "ParameterList",
+                "src": "531:26:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 21,
+                "name": "ParameterList",
+                "src": "565:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "commonType": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          },
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "&&",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "commonType": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              },
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "operator": "==",
+                              "type": "bool"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "addr",
+                                  "referencedDeclaration": 5,
+                                  "type": "address"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 8,
+                                      "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                                      "value": "player_one"
+                                    },
+                                    "id": 22,
+                                    "name": "Identifier",
+                                    "src": "622:10:0"
+                                  }
+                                ],
+                                "id": 23,
+                                "name": "MemberAccess",
+                                "src": "622:15:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "address",
+                                  "type_conversion": true
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_rational_0_by_1",
+                                          "typeString": "int_const 0"
+                                        }
+                                      ],
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "type": "type(address)",
+                                      "value": "address"
+                                    },
+                                    "id": 24,
+                                    "name": "ElementaryTypeNameExpression",
+                                    "src": "641:7:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "30",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "number",
+                                      "type": "int_const 0",
+                                      "value": "0"
+                                    },
+                                    "id": 25,
+                                    "name": "Literal",
+                                    "src": "649:1:0"
+                                  }
+                                ],
+                                "id": 26,
+                                "name": "FunctionCall",
+                                "src": "641:10:0"
+                              }
+                            ],
+                            "id": 27,
+                            "name": "BinaryOperation",
+                            "src": "622:29:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "commonType": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              },
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "operator": "==",
+                              "type": "bool"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "addr",
+                                  "referencedDeclaration": 5,
+                                  "type": "address"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 10,
+                                      "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                                      "value": "player_two"
+                                    },
+                                    "id": 28,
+                                    "name": "Identifier",
+                                    "src": "655:10:0"
+                                  }
+                                ],
+                                "id": 29,
+                                "name": "MemberAccess",
+                                "src": "655:15:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "address",
+                                  "type_conversion": true
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_rational_0_by_1",
+                                          "typeString": "int_const 0"
+                                        }
+                                      ],
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "type": "type(address)",
+                                      "value": "address"
+                                    },
+                                    "id": 30,
+                                    "name": "ElementaryTypeNameExpression",
+                                    "src": "674:7:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "30",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "number",
+                                      "type": "int_const 0",
+                                      "value": "0"
+                                    },
+                                    "id": 31,
+                                    "name": "Literal",
+                                    "src": "682:1:0"
+                                  }
+                                ],
+                                "id": 32,
+                                "name": "FunctionCall",
+                                "src": "674:10:0"
+                              }
+                            ],
+                            "id": 33,
+                            "name": "BinaryOperation",
+                            "src": "655:29:0"
+                          }
+                        ],
+                        "id": 34,
+                        "name": "BinaryOperation",
+                        "src": "622:62:0"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "operator": "=",
+                                  "type": "address"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isLValue": true,
+                                      "isPure": false,
+                                      "lValueRequested": true,
+                                      "member_name": "addr",
+                                      "referencedDeclaration": 5,
+                                      "type": "address"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 8,
+                                          "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                                          "value": "player_one"
+                                        },
+                                        "id": 35,
+                                        "name": "Identifier",
+                                        "src": "696:10:0"
+                                      }
+                                    ],
+                                    "id": 37,
+                                    "name": "MemberAccess",
+                                    "src": "696:15:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": false,
+                                      "lValueRequested": false,
+                                      "member_name": "sender",
+                                      "referencedDeclaration": null,
+                                      "type": "address"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 109,
+                                          "type": "msg",
+                                          "value": "msg"
+                                        },
+                                        "id": 38,
+                                        "name": "Identifier",
+                                        "src": "712:3:0"
+                                      }
+                                    ],
+                                    "id": 39,
+                                    "name": "MemberAccess",
+                                    "src": "712:10:0"
+                                  }
+                                ],
+                                "id": 40,
+                                "name": "Assignment",
+                                "src": "696:26:0"
+                              }
+                            ],
+                            "id": 41,
+                            "name": "ExpressionStatement",
+                            "src": "696:26:0"
+                          },
+                          {
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "operator": "=",
+                                  "type": "bytes32"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isLValue": true,
+                                      "isPure": false,
+                                      "lValueRequested": true,
+                                      "member_name": "encryptedOption",
+                                      "referencedDeclaration": 3,
+                                      "type": "bytes32"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 8,
+                                          "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                                          "value": "player_one"
+                                        },
+                                        "id": 42,
+                                        "name": "Identifier",
+                                        "src": "733:10:0"
+                                      }
+                                    ],
+                                    "id": 44,
+                                    "name": "MemberAccess",
+                                    "src": "733:26:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 19,
+                                      "type": "bytes32",
+                                      "value": "_encryptedOption"
+                                    },
+                                    "id": 45,
+                                    "name": "Identifier",
+                                    "src": "762:16:0"
+                                  }
+                                ],
+                                "id": 46,
+                                "name": "Assignment",
+                                "src": "733:45:0"
+                              }
+                            ],
+                            "id": 47,
+                            "name": "ExpressionStatement",
+                            "src": "733:45:0"
+                          }
+                        ],
+                        "id": 48,
+                        "name": "Block",
+                        "src": "685:101:0"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "operator": "=",
+                                  "type": "address"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isLValue": true,
+                                      "isPure": false,
+                                      "lValueRequested": true,
+                                      "member_name": "addr",
+                                      "referencedDeclaration": 5,
+                                      "type": "address"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 10,
+                                          "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                                          "value": "player_two"
+                                        },
+                                        "id": 49,
+                                        "name": "Identifier",
+                                        "src": "877:10:0"
+                                      }
+                                    ],
+                                    "id": 51,
+                                    "name": "MemberAccess",
+                                    "src": "877:15:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": false,
+                                      "lValueRequested": false,
+                                      "member_name": "sender",
+                                      "referencedDeclaration": null,
+                                      "type": "address"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 109,
+                                          "type": "msg",
+                                          "value": "msg"
+                                        },
+                                        "id": 52,
+                                        "name": "Identifier",
+                                        "src": "893:3:0"
+                                      }
+                                    ],
+                                    "id": 53,
+                                    "name": "MemberAccess",
+                                    "src": "893:10:0"
+                                  }
+                                ],
+                                "id": 54,
+                                "name": "Assignment",
+                                "src": "877:26:0"
+                              }
+                            ],
+                            "id": 55,
+                            "name": "ExpressionStatement",
+                            "src": "877:26:0"
+                          },
+                          {
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "operator": "=",
+                                  "type": "bytes32"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isLValue": true,
+                                      "isPure": false,
+                                      "lValueRequested": true,
+                                      "member_name": "encryptedOption",
+                                      "referencedDeclaration": 3,
+                                      "type": "bytes32"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 10,
+                                          "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                                          "value": "player_two"
+                                        },
+                                        "id": 56,
+                                        "name": "Identifier",
+                                        "src": "914:10:0"
+                                      }
+                                    ],
+                                    "id": 58,
+                                    "name": "MemberAccess",
+                                    "src": "914:26:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 19,
+                                      "type": "bytes32",
+                                      "value": "_encryptedOption"
+                                    },
+                                    "id": 59,
+                                    "name": "Identifier",
+                                    "src": "943:16:0"
+                                  }
+                                ],
+                                "id": 60,
+                                "name": "Assignment",
+                                "src": "914:45:0"
+                              }
+                            ],
+                            "id": 61,
+                            "name": "ExpressionStatement",
+                            "src": "914:45:0"
+                          }
+                        ],
+                        "id": 62,
+                        "name": "Block",
+                        "src": "866:151:0"
+                      }
+                    ],
+                    "id": 63,
+                    "name": "IfStatement",
+                    "src": "619:398:0"
+                  }
+                ],
+                "id": 64,
+                "name": "Block",
+                "src": "565:455:0"
+              }
+            ],
+            "id": 65,
+            "name": "FunctionDefinition",
+            "src": "518:502:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "reveal",
+              "payable": false,
+              "scope": 97,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_encryptedOption",
+                      "scope": 74,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 66,
+                        "name": "ElementaryTypeName",
+                        "src": "1039:7:0"
+                      }
+                    ],
+                    "id": 67,
+                    "name": "VariableDeclaration",
+                    "src": "1039:24:0"
+                  }
+                ],
+                "id": 68,
+                "name": "ParameterList",
+                "src": "1038:26:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 69,
+                "name": "ParameterList",
+                "src": "1072:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            null
+                          ],
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                null
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 96,
+                              "type": "function ()",
+                              "value": "reset"
+                            },
+                            "id": 70,
+                            "name": "Identifier",
+                            "src": "1307:5:0"
+                          }
+                        ],
+                        "id": 71,
+                        "name": "FunctionCall",
+                        "src": "1307:7:0"
+                      }
+                    ],
+                    "id": 72,
+                    "name": "ExpressionStatement",
+                    "src": "1307:7:0"
+                  }
+                ],
+                "id": 73,
+                "name": "Block",
+                "src": "1072:247:0"
+              }
+            ],
+            "id": 74,
+            "name": "FunctionDefinition",
+            "src": "1023:296:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "reset",
+              "payable": false,
+              "scope": 97,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "private"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 75,
+                "name": "ParameterList",
+                "src": "1396:2:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 76,
+                "name": "ParameterList",
+                "src": "1406:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "struct RockPaperScissor.PlayerStruct storage ref"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 8,
+                              "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                              "value": "player_one"
+                            },
+                            "id": 77,
+                            "name": "Identifier",
+                            "src": "1413:10:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "isStructConstructorCall": true,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "struct RockPaperScissor.PlayerStruct memory",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_stringliteral_c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+                                      "typeString": "literal_string \"\""
+                                    },
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 6,
+                                  "type": "type(struct RockPaperScissor.PlayerStruct storage pointer)",
+                                  "value": "PlayerStruct"
+                                },
+                                "id": 78,
+                                "name": "Identifier",
+                                "src": "1426:12:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "hexvalue": "",
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "lValueRequested": false,
+                                  "subdenomination": null,
+                                  "token": "string",
+                                  "type": "literal_string \"\"",
+                                  "value": ""
+                                },
+                                "id": 79,
+                                "name": "Literal",
+                                "src": "1439:2:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "address",
+                                  "type_conversion": true
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_rational_0_by_1",
+                                          "typeString": "int_const 0"
+                                        }
+                                      ],
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "type": "type(address)",
+                                      "value": "address"
+                                    },
+                                    "id": 80,
+                                    "name": "ElementaryTypeNameExpression",
+                                    "src": "1442:7:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "30",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "number",
+                                      "type": "int_const 0",
+                                      "value": "0"
+                                    },
+                                    "id": 81,
+                                    "name": "Literal",
+                                    "src": "1450:1:0"
+                                  }
+                                ],
+                                "id": 82,
+                                "name": "FunctionCall",
+                                "src": "1442:10:0"
+                              }
+                            ],
+                            "id": 83,
+                            "name": "FunctionCall",
+                            "src": "1426:27:0"
+                          }
+                        ],
+                        "id": 84,
+                        "name": "Assignment",
+                        "src": "1413:40:0"
+                      }
+                    ],
+                    "id": 85,
+                    "name": "ExpressionStatement",
+                    "src": "1413:40:0"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "struct RockPaperScissor.PlayerStruct storage ref"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 10,
+                              "type": "struct RockPaperScissor.PlayerStruct storage ref",
+                              "value": "player_two"
+                            },
+                            "id": 86,
+                            "name": "Identifier",
+                            "src": "1460:10:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "isStructConstructorCall": true,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "struct RockPaperScissor.PlayerStruct memory",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_stringliteral_c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+                                      "typeString": "literal_string \"\""
+                                    },
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 6,
+                                  "type": "type(struct RockPaperScissor.PlayerStruct storage pointer)",
+                                  "value": "PlayerStruct"
+                                },
+                                "id": 87,
+                                "name": "Identifier",
+                                "src": "1473:12:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "hexvalue": "",
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "lValueRequested": false,
+                                  "subdenomination": null,
+                                  "token": "string",
+                                  "type": "literal_string \"\"",
+                                  "value": ""
+                                },
+                                "id": 88,
+                                "name": "Literal",
+                                "src": "1486:2:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "address",
+                                  "type_conversion": true
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_rational_0_by_1",
+                                          "typeString": "int_const 0"
+                                        }
+                                      ],
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "type": "type(address)",
+                                      "value": "address"
+                                    },
+                                    "id": 89,
+                                    "name": "ElementaryTypeNameExpression",
+                                    "src": "1489:7:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "30",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "number",
+                                      "type": "int_const 0",
+                                      "value": "0"
+                                    },
+                                    "id": 90,
+                                    "name": "Literal",
+                                    "src": "1497:1:0"
+                                  }
+                                ],
+                                "id": 91,
+                                "name": "FunctionCall",
+                                "src": "1489:10:0"
+                              }
+                            ],
+                            "id": 92,
+                            "name": "FunctionCall",
+                            "src": "1473:27:0"
+                          }
+                        ],
+                        "id": 93,
+                        "name": "Assignment",
+                        "src": "1460:40:0"
+                      }
+                    ],
+                    "id": 94,
+                    "name": "ExpressionStatement",
+                    "src": "1460:40:0"
+                  }
+                ],
+                "id": 95,
+                "name": "Block",
+                "src": "1406:98:0"
+              }
+            ],
+            "id": 96,
+            "name": "FunctionDefinition",
+            "src": "1382:122:0"
+          }
+        ],
+        "id": 97,
+        "name": "ContractDefinition",
+        "src": "226:1280:0"
+      }
+    ],
+    "id": 98,
+    "name": "SourceUnit",
+    "src": "201:1306:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0x345ca3e014aaf5dca488057592ee47305d9b3e10"
+    }
+  },
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-01-11T19:02:03.567Z"
+}
