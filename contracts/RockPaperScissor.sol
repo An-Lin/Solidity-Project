@@ -18,7 +18,7 @@ contract RockPaperScissor is TurnBasedGame {
 	    //check user only send 0.1 ETH
 	    require(msg.value==100000000000000000);
 	    balance[msg.sender] += msg.value;
-	    require(balance[msg.sender] > 0 && _encryptedOption!="");
+	    require(balance[msg.sender] > 0 && _encryptedOption != "");
 
 	    //record the encrypted option
 	    OptionList[msg.sender].encryptedOption = _encryptedOption;
@@ -30,7 +30,7 @@ contract RockPaperScissor is TurnBasedGame {
 		    delete UnmatchGameId[UnmatchGameId.length-1];
 
 		    //player 2 join game
-		    gameIdToGame[id].players.push(Player(msg.sender, _name));
+		    addPlayer(id, _name);
 		    //send event to notify user to call reveal()
 		    GameKeyReveal(id);
 		}
@@ -42,32 +42,29 @@ contract RockPaperScissor is TurnBasedGame {
 		}
 	}
 
-	function reveal(uint id, bytes32 key) public {
-	   /*
+	function reveal(/*uint id, bytes32 key*/) public {
+	    /*
         TODO - check only players in that game(id) can trigger this function
-        */
-
-        /*
         TODO - recieve key to unlock Optionlist. if hash doent match, automatically lose
         */
 
         // if both player option is unlock, execute the game
 	    bool condition = true;
 	    if(condition){
-	        ExeuteRockPaperScissor(id);
+	        ExeuteRockPaperScissor();
 	    }
 	}
 
     // execute the game after we decode both player option
-    function ExeuteRockPaperScissor(uint id) private {
-	    require(id!=0);
+    function ExeuteRockPaperScissor() private {
+        Game storage game = getGame();
 
-	    address player_one = gameIdToGame[id].players[0].player;
-	    address player_two = gameIdToGame[id].players[1].player;
+	    address player_one = game.players[0].player;
+	    address player_two = game.players[1].player;
 	    address winner;
 
 	    //we have hardcoded wager amount to be 0.1ETH
-	    gameIdToGame[id].jackpot = 200000000000000000;
+	    game.jackpot = 200000000000000000;
 
 	    //if both player have the same option
 	    if(OptionList[player_one].option == OptionList[player_two].option ){
@@ -83,9 +80,9 @@ contract RockPaperScissor is TurnBasedGame {
             */
 
     	    //brodcast the result
-    	    GameSessionEnded(winner,gameIdToGame[id].jackpot);
-            balance[winner] += gameIdToGame[id].jackpot;
+    	    GameSessionEnded(winner,getGame().jackpot);
+            balance[winner] += getGame().jackpot;
 	    }
-	    gameIdToGame[id].jackpot=0;
+	    getGame().jackpot=0;
     }
 }
