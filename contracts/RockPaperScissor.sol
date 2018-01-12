@@ -15,10 +15,9 @@ contract RockPaperScissor is TurnBasedGame {
 	}
 
 	function play(bytes32 _encryptedOption, string _name) payable public {
-	    //check user only send 0.1 ETH
-	    require(msg.value==100000000000000000);
+	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
+	    require((msg.value==100000000000000000 || balance[msg.sender] > 1000000000000000000) && (_encryptedOption != ""));
 	    balance[msg.sender] += msg.value;
-	    require(balance[msg.sender] > 0 && _encryptedOption != "");
 
 	    //record the encrypted option
 	    OptionList[msg.sender].encryptedOption = _encryptedOption;
@@ -62,15 +61,16 @@ contract RockPaperScissor is TurnBasedGame {
 	    address player_one = game.players[0].player;
 	    address player_two = game.players[1].player;
 	    address winner;
+	    address loser;
 
 	    //we have hardcoded wager amount to be 0.1ETH
-	    game.jackpot = 200000000000000000;
+	    game.jackpot = 100000000000000000;
 
-	    //if both player have the same option
+	    //if both player have the same option, no one wins
 	    if(OptionList[player_one].option == OptionList[player_two].option ){
 	        //brodcast draw result
-	        GameSessionEnded(player_one,100000000000000000);
-	        GameSessionEnded(player_two,100000000000000000);
+	        GameSessionEnded(player_one,0);
+	        GameSessionEnded(player_two,0);
 	    }
 
 	    else{
@@ -82,6 +82,8 @@ contract RockPaperScissor is TurnBasedGame {
     	    //brodcast the result
     	    GameSessionEnded(winner, game.jackpot);
             balance[winner] += game.jackpot;
+            balance[loser] -= game.jackpot;
+            GameSessionEnded(winner,game.jackpot);
 	    }
 	    game.jackpot = 0;
     }
