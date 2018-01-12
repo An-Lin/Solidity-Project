@@ -3,7 +3,7 @@ pragma solidity ^0.4.18;
 contract TurnBasedGame {
     mapping(address => uint) internal addressToGameId;
     mapping(uint => Game) internal gameIdToGame;
-    mapping (address => uint) pendingWithdrawals;
+    mapping (address => uint) balance;
     uint internal gamesPlayed = 0;
 
     function TurnBasedGame() public {
@@ -31,9 +31,12 @@ contract TurnBasedGame {
         /*
         TODO - Locks
         */
-        Game memory game;
-        gameIdToGame[gamesPlayed] = game;
-        gameIdToGame[gamesPlayed].players.push(Player(msg.sender, name));
+        Game storage game = gameIdToGame[gamesPlayed];
+        game.players.push(Player(msg.sender, name));
+        game.gameState = 0;
+        game.jackpot = msg.value;
+        game.id = gamesPlayed;
+        
         addressToGameId[msg.sender] = gamesPlayed;
 
         //notify game created
@@ -49,10 +52,10 @@ contract TurnBasedGame {
     }
 
     function withdraw() public {
-        uint amount = pendingWithdrawals[msg.sender];
+        uint amount = balance[msg.sender];
         // Remember to zero the pending refund before
         // sending to prevent re-entrancy attacks
-        pendingWithdrawals[msg.sender] = 0;
+        balance[msg.sender] = 0;
         msg.sender.transfer(amount);
     }
 }
