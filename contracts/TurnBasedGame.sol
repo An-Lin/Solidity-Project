@@ -31,24 +31,35 @@ contract TurnBasedGame {
         /*
         TODO - Locks
         */
-        Game storage game = gameIdToGame[gamesPlayed];
+
+        //increment gameId
+        Game storage game = gameIdToGame[gamesPlayed++];
+        // game id '0' will be reserved and represent a fresh contract.
+        assert(gamesPlayed > 0);
         game.players.push(Player(msg.sender, name));
         game.gameState = 0;
         game.jackpot = msg.value;
         game.id = gamesPlayed;
-        
+
         addressToGameId[msg.sender] = gamesPlayed;
 
         //notify game created
         GameSessionCreated(gamesPlayed);
-        //increment gameId
-        gamesPlayed++;
     }
 
     function getGameId() internal view returns (uint){
         uint id = addressToGameId[msg.sender];
         require(id != 0);
         return id;
+    }
+
+    function getGame() internal view returns (Game storage id){
+        return gameIdToGame[getGameId()];
+    }
+
+    function addPlayer(uint _gameID, string _name) internal {
+        addressToGameId[msg.sender] = _gameID;
+        gameIdToGame[_gameID].players.push(Player(msg.sender, _name));
     }
 
     function withdraw() public {
