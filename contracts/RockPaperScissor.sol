@@ -80,9 +80,9 @@ contract RockPaperScissor is TurnBasedGame {
             */
 
     	    //brodcast the result
-    	    GameSessionEnded(winner,getGame().jackpot);
-            balance[winner] += getGame().jackpot;
+    	    GameSessionEnded(winner, game.jackpot);
+            balance[winner] += game.jackpot;
 	    }
-	    getGame().jackpot=0;
+	    game.jackpot = 0;
     }
 }
