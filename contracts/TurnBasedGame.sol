@@ -3,7 +3,7 @@ pragma solidity ^0.4.18;
 contract TurnBasedGame {
     mapping(address => uint) internal addressToGameId;
     mapping(uint => Game) internal gameIdToGame;
-    mapping (address => uint) balance;
+    mapping (address => uint) Balance;
     uint internal gamesPlayed = 0;
 
     function TurnBasedGame() public {
@@ -26,18 +26,14 @@ contract TurnBasedGame {
         uint id;
     }
 
-    function startGame(string name) internal {
-        require(msg.value > 0);
-        /*
-        TODO - Locks
-        */
+    function startGame(string name) internal checkGameState (0) {
 
         //increment gameId
         Game storage game = gameIdToGame[gamesPlayed++];
         // game id '0' will be reserved and represent a fresh contract.
         assert(gamesPlayed > 0);
         game.players.push(Player(msg.sender, name));
-        game.gameState = 0;
+        game.gameState = 1;
         game.jackpot = msg.value;
         game.id = gamesPlayed;
 
@@ -63,10 +59,22 @@ contract TurnBasedGame {
     }
 
     function withdraw() public {
-        uint amount = balance[msg.sender];
+        uint amount = Balance[msg.sender];
         // Remember to zero the pending refund before
         // sending to prevent re-entrancy attacks
-        balance[msg.sender] = 0;
+        Balance[msg.sender] = 0;
         msg.sender.transfer(amount);
+    }
+
+    modifier checkGameState (uint _gameState){
+        require(getGame().gameState ==  _gameState);
+        _;
+    }
+    
+    function getPlayerStatus() external view returns(uint gameId, uint gameState, uint gameJackPot){
+        Game memory temp_game = getGame();
+        gameId =  temp_game.id;
+        gameState =  temp_game.gameState;
+        gameJackPot =  temp_game.jackpot;
     }
 }
