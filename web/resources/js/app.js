@@ -60,15 +60,14 @@ var App = (function() {
 
         initContract: function() {
             console.log("Instantiating Smart Contract Artifact...");
-            $.getJSON('/RockPaperScissor.json', function(data) {
+            $.getJSON('/web/contracts/RockPaperScissor.json', function(data) {
                 // Get the necessary contract artifact file and instantiate it with truffle-contract.
                 var RockPaperScissorArtifact = data;
                 App.contracts.RockPaperScissor = TruffleContract(RockPaperScissorArtifact);
 
                 // Set the provider for our contract.
                 App.contracts.RockPaperScissor.setProvider(App.web3Provider);
-
-                return App.getTestNum();
+                return true;
             });
 
             return App.bindEvents();
