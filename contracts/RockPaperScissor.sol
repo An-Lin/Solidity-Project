@@ -3,8 +3,8 @@ pragma solidity ^0.4.18;
 import './TurnBasedGame.sol';
 
 contract RockPaperScissor is TurnBasedGame {
-	
-	enum options { Rock, Paper, Scissor }    
+
+	enum options { Rock, Paper, Scissor }
 	uint[] private UnmatchGameId;
     mapping(address => PlayerOptions) private OptionList;
     struct PlayerOptions{
@@ -90,29 +90,21 @@ contract RockPaperScissor is TurnBasedGame {
 	    }
 	    game.jackpot = 0;
     }
-    
+
     //This function would return winner option
     function _DetermineWinner(options _playerOne, options _playerTwo) private pure returns (options) {
-        /*
-            This looks horrible but got the job done
-        */
-         if(_playerOne == options.Scissor && _playerTwo == options.Paper){
-	            return _playerOne;
-	        }
-	    else if(_playerOne == options.Paper && _playerTwo == options.Scissor){
-	             return _playerTwo;
-	        }	        
-	    else if(_playerOne == options.Rock && _playerTwo == options.Scissor){
-	             return _playerOne;
-	        }
-        else if(_playerOne == options.Scissor && _playerTwo == options.Rock){
-	            return _playerTwo;
-	        }
-        else if(_playerOne == options.Paper && _playerTwo == options.Rock){
-	             return  _playerOne;
-	        }
-        else if(_playerOne == options.Rock && _playerTwo == options.Paper){
-	             return _playerTwo;
-	        }
+        if(_playerOne == options.Scissor){
+            if(_playerTwo == options.Paper) return _playerOne;
+            if(_playerTwo == options.Rock) return _playerTwo;
+        }
+	    else if(_playerOne == options.Paper){
+            if(_playerTwo == options.Rock) return _playerOne;
+            if(_playerTwo == options.Scissor) return _playerTwo;
+        }
+	    else if(_playerOne == options.Rock){
+            if(_playerTwo == options.Scissor) return _playerOne;
+            if(_playerTwo == options.Paper) return _playerTwo;
+        }
+	    assert(false); // SANITY CHECK: We should never get here.
     }
 }
