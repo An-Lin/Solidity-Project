@@ -8,16 +8,17 @@ contract RockPaperScissor is TurnBasedGame {
 	uint[] private UnmatchGameId;
     mapping(address => PlayerOptions) private OptionList;
     struct PlayerOptions{
-        bytes32 encryptedOption;
+        string encryptedOption;
         options option;
     }
 
 	function RockPaperScissor() public{
 	}
 
-	function play(bytes32 _encryptedOption, string _name) payable public {
+	function play(string _encryptedOption, string _name) payable public {
 	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
-	    require((msg.value==100000000000000000 || balance[msg.sender] > 1000000000000000000) && (_encryptedOption != ""));
+	    bytes memory tempEmptyStringTest = bytes(_encryptedOption);
+	    require((msg.value==100000000000000000 || balance[msg.sender] > 1000000000000000000) && (tempEmptyStringTest.length>1));
 	    balance[msg.sender] += msg.value;
 
 	    //record the encrypted option
