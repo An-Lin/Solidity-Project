@@ -3,12 +3,13 @@ pragma solidity ^0.4.18;
 import './TurnBasedGame.sol';
 
 contract RockPaperScissor is TurnBasedGame {
-
-    uint[] private UnmatchGameId;
+	
+	enum options { Rock, Paper, Scissor }    
+	uint[] private UnmatchGameId;
     mapping(address => PlayerOptions) private OptionList;
     struct PlayerOptions{
         bytes32 encryptedOption;
-        bytes32 option;
+        options option;
     }
 
 	function RockPaperScissor() public{
@@ -72,19 +73,36 @@ contract RockPaperScissor is TurnBasedGame {
 	        GameSessionEnded(player_one,0);
 	        GameSessionEnded(player_two,0);
 	    }
-
 	    else{
-
-            /*
-            TODO - decide the winner if it is not a draw
-            */
-
-    	    //brodcast the result
+    	    winner = _DetermineWinner(player_one,player_two);
+    	    if(winner == player_one) 
+    	        loser = player_two;
+    	    else
+    	        loser = player_one;
     	    GameSessionEnded(winner, game.jackpot);
             balance[winner] += game.jackpot;
             balance[loser] -= game.jackpot;
             GameSessionEnded(winner,game.jackpot);
 	    }
 	    game.jackpot = 0;
+    }
+    
+    //This function would return winner address base on the option
+    function _DetermineWinner(address _playerOne, address _playerTwo) private returns (address) {
+        /*
+            This looks horrible but got the job done
+        */
+         if(OptionList[ _playerOne].option == options.Scissor && OptionList[_playerTwo].option == options.Paper)
+	            return _playerOne;
+	    else if(OptionList[ _playerOne].option == options.Paper && OptionList[_playerTwo].option == options.Scissor)
+	             return _playerTwo;        
+	    else if(OptionList[ _playerOne].option == options.Rock && OptionList[_playerTwo].option == options.Scissor)
+	             return _playerOne;
+        else if(OptionList[ _playerOne].option == options.Scissor && OptionList[_playerTwo].option == options.Rock)
+	            return _playerTwo;
+        else if(OptionList[ _playerOne].option == options.Paper && OptionList[_playerTwo].option == options.Rock)
+	             return  _playerOne;
+        else if(OptionList[ _playerOne].option == options.Rock && OptionList[_playerTwo].option == options.Paper)
+	             return _playerTwo;
     }
 }
