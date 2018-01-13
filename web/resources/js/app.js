@@ -19,7 +19,7 @@ var App = (function() {
                 $nonce.val("");
             },
             validPassword: function(){
-                var result = $nonce.val().length > MINIMUM_PASSWORD_LENGTH;
+                var result = $nonce.val().length >= MINIMUM_PASSWORD_LENGTH;
                 if (result) {
                     return true;
                 }
@@ -27,7 +27,7 @@ var App = (function() {
                 return false;
             },
             validUsername: function(){
-                var result = $username.val().length > MINIMUM_USERNAME_LENGTH;
+                var result = $username.val().length >= MINIMUM_USERNAME_LENGTH;
                 if (result) {
                     return true;
                 }
