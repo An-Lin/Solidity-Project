@@ -74,10 +74,14 @@ contract RockPaperScissor is TurnBasedGame {
 	        GameSessionEnded(player_two,0);
 	    }
 	    else{
-    	    winner = _DetermineWinner(player_one,player_two);
-    	    if(winner == player_one) 
-    	        loser = player_two;
-    	    else
+	        if(OptionList[ player_one].option == _DetermineWinner(OptionList[ player_one].option,OptionList[ player_two].option)){
+	            winner = player_one;
+	            loser = player_two;
+	        }
+    	    else{
+    	        winner = player_one;
+	            loser = player_two;
+    	    }
     	        loser = player_one;
     	    GameSessionEnded(winner, game.jackpot);
             balance[winner] += game.jackpot;
@@ -87,22 +91,28 @@ contract RockPaperScissor is TurnBasedGame {
 	    game.jackpot = 0;
     }
     
-    //This function would return winner address base on the option
-    function _DetermineWinner(address _playerOne, address _playerTwo) private returns (address) {
+    //This function would return winner option
+    function _DetermineWinner(options _playerOne, options _playerTwo) private pure returns (options) {
         /*
             This looks horrible but got the job done
         */
-         if(OptionList[ _playerOne].option == options.Scissor && OptionList[_playerTwo].option == options.Paper)
+         if(_playerOne == options.Scissor && _playerTwo == options.Paper){
 	            return _playerOne;
-	    else if(OptionList[ _playerOne].option == options.Paper && OptionList[_playerTwo].option == options.Scissor)
-	             return _playerTwo;        
-	    else if(OptionList[ _playerOne].option == options.Rock && OptionList[_playerTwo].option == options.Scissor)
-	             return _playerOne;
-        else if(OptionList[ _playerOne].option == options.Scissor && OptionList[_playerTwo].option == options.Rock)
-	            return _playerTwo;
-        else if(OptionList[ _playerOne].option == options.Paper && OptionList[_playerTwo].option == options.Rock)
-	             return  _playerOne;
-        else if(OptionList[ _playerOne].option == options.Rock && OptionList[_playerTwo].option == options.Paper)
+	        }
+	    else if(_playerOne == options.Paper && _playerTwo == options.Scissor){
 	             return _playerTwo;
+	        }	        
+	    else if(_playerOne == options.Rock && _playerTwo == options.Scissor){
+	             return _playerOne;
+	        }
+        else if(_playerOne == options.Scissor && _playerTwo == options.Rock){
+	            return _playerTwo;
+	        }
+        else if(_playerOne == options.Paper && _playerTwo == options.Rock){
+	             return  _playerOne;
+	        }
+        else if(_playerOne == options.Rock && _playerTwo == options.Paper){
+	             return _playerTwo;
+	        }
     }
 }
