@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="resources/css/bootstrap/bootstrap.min.css">
 
   <!-- Custom styles for this template -->
-  <link rel="stylesheet" href="resources/css/master.css">
+  <link rel="stylesheet" href="resources/css/style.css">
 </head>
 
 <body>
@@ -28,15 +28,9 @@
         <li class="nav-item active">
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
       </ul>
       <form class="form-inline mt-2 mt-md-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search - Not Built Yet" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </div>
@@ -44,12 +38,32 @@
 
   <main role="main" class="container">
     <div class="jumbotron">
-      <h1>Rock Paper Scissor</h1>
-      <p class="lead">Coming soon to a blockchain near you!</p>
-      <a class="btn btn-lg btn-primary" href="#" role="button">Read More &raquo;</a>
+        <h1 class="text-center">Rock Paper Scissor</h1>
+        <p class="lead text-center">Coming soon to a blockchain near you!</p>
     </div>
-  </main>
-
+    <div id="game-state" class="alert alert-primary" role="alert">
+        Welcome, you are not in any active games currently.  Please choose a hand to play!
+    </div>
+</main>
+<div class="container">
+    <div class="row text-center mx-auto">
+        <div class="col-sm">
+        </div>
+        <div class="btn-group btn-group-toggle col" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options" id="rock" autocomplete="off" checked> Rock
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="paper" autocomplete="off"> Paper
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="scissor" autocomplete="off"> Scissor
+            </label>
+            <button id="play-button" type="button" class="btn btn-outline-secondary">Play Hand!</button>
+        </div>
+        <div class="col-sm"></div>
+    </div>
+</div>
   <!-- Bootstrap core JavaScript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -58,6 +72,7 @@
   <script src="resources/js/libs/bootstrap/bootstrap.min.js"></script>
   <script src="resources/js/libs/web3.min.js"></script>
   <script src="resources/js/libs/truffle-contract.min.js"></script>
+  <script src="resources/js/utility.js"></script>
   <script src="resources/js/app.js"></script>
 </body>
 
