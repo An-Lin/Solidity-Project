@@ -47,8 +47,25 @@
 </main>
 <div class="container">
     <div class="row text-center mx-auto">
-        <div class="col-sm">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <div class="input-group-append">
+                    <span class="input-group-text">Password</span>
+                </div>
+                <input id="nonce" type="text" class="form-control" placeholder="Enter a random password.  Minimum 3 characters.  (FOR DEVELOPMENT ONLY)" aria-label="Enter a random password (FOR DEVELOPMENT ONLY)" aria-describedby="nonce">
+            </div>
         </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input id="username" type="text" class="form-control" placeholder="Enter a username.  Minimum 3 characters.  (FOR DEVELOPMENT ONLY)" aria-label="Enter a random password (FOR DEVELOPMENT ONLY)" aria-describedby="username">
+                <div class="input-group-append">
+                    <span class="input-group-text">Username</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row text-center mx-auto">
+        <div class="col-sm"> </div>
         <div class="btn-group btn-group-toggle col" data-toggle="buttons">
             <label class="btn btn-secondary active">
                 <input type="radio" name="options" id="rock" autocomplete="off" checked> Rock
