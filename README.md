@@ -12,3 +12,4 @@ Ideas for version 2
 2. Game history page with result
 3. A deposite function (maybe the user just want to deposit first, right now the only way to deposite is to play)
 4. Able to challenge friend with address
+5. Player able to set amount to wagerr (auto match player with same amount)
