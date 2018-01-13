@@ -92,7 +92,7 @@ var App = (function() {
         },
         bindEvents: function() {
             UIController.init();
-            UIController.attachPlayButtonClickListener(this.play());
+            UIController.attachPlayButtonClickListener(this.play);
         },
     }
 })()
