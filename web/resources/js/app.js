@@ -3,12 +3,18 @@ var App = (function() {
         const MINIMUM_PASSWORD_LENGTH = 3; // CHANGE FOR PRODUCTION
         const MINIMUM_USERNAME_LENGTH = 3; // CHANGE FOR PRODUCTION
         var bet_amount = '0.1'; // CHANGE FOR PRODUCTION
-        var $nonce = $("#nonce");
-        var $username = $("#username");
-        var $playButton = $("#play-button");
+        var $nonce, $username, $playButton, $userChoice;
+
+        var RPS = {
+            ROCK: 1,
+            PAPER: 2,
+            SCISSOR: 3,
+        }
 
         function attachUIListeners() {
-
+            $nonce = $("#nonce");
+            $username = $("#username");
+            $playButton = $("#play-button");
         }
 
         return {
@@ -49,6 +55,9 @@ var App = (function() {
             },
             attachPlayButtonClickListener: function(func){
                 $playButton.click(func);
+            },
+            getUserChoice: function(){
+                return $('#rps-choice input:radio:checked').val();
             }
         }
     })()
@@ -104,12 +113,13 @@ var App = (function() {
 
                 App.contracts.RockPaperScissor.deployed().then(function(instance) {
                     RockPaperScissorInstance = instance;
-                    pass = web3.sha3(UIController.getPassword());
                     user = UIController.getUsername();
+                    choice = UIController.getUserChoice();
+                    pass = web3.sha3(UIController.getPassword() + choice);
                     // console.log(pass, user, amount);
                     return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0], value: web3.toWei(UIController.getAmount(), 'ether') });
                 }).then(function(result) {
-                    console.log(result);d
+                    console.log(result);
                     num = result.c[0];
                 }).catch(function(err) {
                     console.log(err.message);
