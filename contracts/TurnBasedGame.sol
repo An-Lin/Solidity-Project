@@ -14,6 +14,7 @@ contract TurnBasedGame {
     event GameKeyReveal(uint gameId);
     event GameSessionEnded(address winner, uint gameJackPot);
     event CheckPoint(uint error);
+    event RevealValidTime(uint time);
 
     struct Player {
         address player;
@@ -25,6 +26,7 @@ contract TurnBasedGame {
         uint gameState;
         uint jackpot;
         uint id;
+        uint validTime;
     }
 
     function startGame(string name) internal {

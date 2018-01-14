@@ -38,11 +38,16 @@ contract RockPaperScissor is TurnBasedGame {
 		    //player 2 join game, max number of player joined
 		    addressToGameId[msg.sender] = id;
 		    addPlayer(id, _name);
-		    gameIdToGame[id].gameState = 2;
+		    //we can skip setting gameState to 2 since we have user input when joined game
+		    //gameIdToGame[id].gameState = 2;
 		    //Both players already submit their option, move to gameState 3 to request key to reveal
 		    gameIdToGame[id].gameState = 3;
 		    //send event to notify user to call reveal()
 		    GameKeyReveal(id);
+		    //record valid time for reveal
+		    gameIdToGame[id].validTime = now + 1 hours;
+		    //send event request user to reply within this time
+		    RevealValidTime(now + 1 hours);
 		}
 		//if no avaliable game to join, start a fresh game and add that to unmatchGame list
 		else{
@@ -54,6 +59,7 @@ contract RockPaperScissor is TurnBasedGame {
 
 	function reveal(string _key, int _option) public checkGameState (3) {
 	    Game memory current_game = getGame();
+	    require(current_game.gameState == 3 && current_game.validTime !=0);
 
         //record the key
         OptionList[msg.sender].key = _key;
@@ -62,8 +68,11 @@ contract RockPaperScissor is TurnBasedGame {
         //check if they key is valid, it key is not valid, default lose
         if(keccak256(_key,_option)!=OptionList[msg.sender].encryptedOption) _DefaultLose(msg.sender);
 
+        //if your oponent did not reveal within the time frame
+        else if(now>current_game.validTime) _DefaultWin(msg.sender);
+
         //check if both player reveal their key
-        if((stringToBytes32(OptionList[current_game.players[0].player].key) != 0x0)&&(stringToBytes32(OptionList[current_game.players[1].player].key) != 0x0)){
+        else if((stringToBytes32(OptionList[current_game.players[0].player].key) != 0x0)&&(stringToBytes32(OptionList[current_game.players[1].player].key) != 0x0)){
             UnlockedValid = true;
             OptionList[msg.sender].option = intToOption(_option);
             //determine playerOne and playerTwo address
@@ -142,6 +151,23 @@ contract RockPaperScissor is TurnBasedGame {
         Balance[loser] -= game.jackpot;
         game.gameState = 4;
         GameSessionEnded(winner,game.jackpot);
+    }
+
+    //This function is called when the opponent did not call reveal() within x time, default win sender
+    function _DefaultWin(address winner) private {
+        Game storage game = getGame();
+	    address loser;
+
+	    if(winner == game.players[0].player) loser = game.players[1].player;
+	    else loser = game.players[0].player;
+
+	    //we have hardcoded wager amount to be 0.1ETH
+	    game.jackpot = 100000000000000000;
+	    Balance[winner] += game.jackpot;
+        Balance[loser] -= game.jackpot;
+        game.gameState = 4;
+        GameSessionEnded(winner,game.jackpot);
+        game.jackpot = 0;
     }
 
     //this function convert string to byte32 for hash comparison
