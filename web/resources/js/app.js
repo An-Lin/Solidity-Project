@@ -54,11 +54,14 @@ var App = (function() {
     })()
 
     var Events = (function(){
-        var playEvent1 = App.contracts.CheckPoint(function(err, result){
-            console.log(result);
-        });
+        var checkpoint;
 
         return {
+            init: function(){
+                checkpoint = App.contracts.CheckPoint(function(err, result){
+                    console.log(result);
+                });
+            }
 
         }
     })();
@@ -115,6 +118,7 @@ var App = (function() {
             }
         },
         bindEvents: function() {
+            Events.init();
             UIController.init();
             UIController.attachPlayButtonClickListener(this.play);
         },
