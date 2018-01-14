@@ -2,6 +2,7 @@ var App = (function() {
     var UIController = (function() {
         const MINIMUM_PASSWORD_LENGTH = 3; // CHANGE FOR PRODUCTION
         const MINIMUM_USERNAME_LENGTH = 3; // CHANGE FOR PRODUCTION
+        var bet_amount = '0.1'; // CHANGE FOR PRODUCTION
         var $nonce = $("#nonce");
         var $username = $("#username");
         var $playButton = $("#play-button");
@@ -26,6 +27,9 @@ var App = (function() {
                 alert("Please choose a password!");
                 return false;
             },
+            getPassword: function(){
+                return $nonce.val();
+            },
             validUsername: function(){
                 var result = $username.val().length >= MINIMUM_USERNAME_LENGTH;
                 if (result) {
@@ -33,6 +37,12 @@ var App = (function() {
                 }
                 alert("Please choose a username!");
                 return false;
+            },
+            getUsername: function(){
+                return $username.val();
+            },
+            getAmount: function(){
+                return bet_amount;
             },
             userCanPlay: function() {
                 return this.validPassword() && this.validUsername();
@@ -81,9 +91,13 @@ var App = (function() {
 
                 App.contracts.RockPaperScissor.deployed().then(function(instance) {
                     RockPaperScissorInstance = instance;
-
-                    return RockPaperScissorInstance.play();
+                    pass = web3.fromAscii(UIController.getPassword(), 32);
+                    user = UIController.getUsername();
+                    amount = web3.toWei(UIController.getAmount(), 'ether');
+                    console.log(pass, user, amount);
+                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0], value: amount});
                 }).then(function(result) {
+                    console.log(result);
                     num = result.c[0];
                 }).catch(function(err) {
                     console.log(err.message);
