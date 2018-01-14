@@ -67,6 +67,12 @@ contract TurnBasedGame {
         msg.sender.transfer(amount);
     }
 
+    function deposit() payable public {
+        require(msg.value>0);
+        Balance[msg.sender] += msg.value;
+    }
+
+
     modifier checkGameState (uint _gameState){
         require(getGame().gameState ==  _gameState);
         _;
