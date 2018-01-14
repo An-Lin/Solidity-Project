@@ -106,11 +106,10 @@ var App = (function() {
                     RockPaperScissorInstance = instance;
                     pass = web3.sha3(UIController.getPassword());
                     user = UIController.getUsername();
-                    amount = new BigNumber(web3.toWei(UIController.getAmount(), 'ether'));
-                    console.log(pass, user, amount);
-                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0], value: amount});
+                    // console.log(pass, user, amount);
+                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0], value: web3.toWei(UIController.getAmount(), 'ether') });
                 }).then(function(result) {
-                    console.log(result);
+                    console.log(result);d
                     num = result.c[0];
                 }).catch(function(err) {
                     console.log(err.message);
