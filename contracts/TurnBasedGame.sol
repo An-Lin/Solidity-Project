@@ -13,6 +13,7 @@ contract TurnBasedGame {
     event GameSessionCreated(uint gameId);
     event GameKeyReveal(uint gameId);
     event GameSessionEnded(address winner, uint gameJackPot);
+    event CheckPoint(uint error);
 
     struct Player {
         address player;

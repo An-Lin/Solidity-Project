@@ -18,6 +18,7 @@ contract RockPaperScissor is TurnBasedGame {
 
 	function play(bytes32 _encryptedOption, string _name) public payable {
 	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
+	    CheckPoint(0);
 	    require((msg.value==100000000000000000 || Balance[msg.sender] > 1000000000000000000) && (_encryptedOption.length>1));
 	    Balance[msg.sender] += msg.value;
 
