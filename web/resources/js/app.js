@@ -91,9 +91,9 @@ var App = (function() {
 
                 App.contracts.RockPaperScissor.deployed().then(function(instance) {
                     RockPaperScissorInstance = instance;
-                    pass = web3.fromAscii(UIController.getPassword(), 32);
+                    pass = web3.sha3(UIController.getPassword());
                     user = UIController.getUsername();
-                    amount = web3.toWei(UIController.getAmount(), 'ether');
+                    amount = new BigNumber(web3.toWei(UIController.getAmount(), 'ether'));
                     console.log(pass, user, amount);
                     return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0], value: amount});
                 }).then(function(result) {
