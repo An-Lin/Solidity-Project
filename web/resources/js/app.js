@@ -53,6 +53,16 @@ var App = (function() {
         }
     })()
 
+    var Events = (function(){
+        var playEvent1 = App.contracts.Checkpoint(function(err, result){
+            console.log(result);
+        });
+
+        return {
+
+        }
+    })();
+
     return {
         web3Provider: null,
         contracts: {},
