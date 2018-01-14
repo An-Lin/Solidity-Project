@@ -18,8 +18,12 @@ contract RockPaperScissor is TurnBasedGame {
 
 	function play(bytes32 _encryptedOption, string _name) public payable {
 	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
-	    CheckPoint(0);
-	    require((msg.value==100000000000000000 || Balance[msg.sender] > 1000000000000000000) && (_encryptedOption.length>1));
+		CheckPoint(0); // Made it into the function
+		require(msg.value==100000000000000000 || Balance[msg.sender] > 1000000000000000000);
+		CheckPoint(1); // Made it passed require 1
+
+	    require(_encryptedOption.length > 1);
+		CheckPoint(2); // made it passed require 2
 	    Balance[msg.sender] += msg.value;
 
 	    //record the encrypted option
@@ -50,10 +54,10 @@ contract RockPaperScissor is TurnBasedGame {
 
 	function reveal(string _key, int _option) public checkGameState (3) {
 	    Game memory current_game = getGame();
-	    
+
         //record the key
         OptionList[msg.sender].key = _key;
-        
+
         bool UnlockedValid = false;
         //check if they key is valid, it key is not valid, default lose
         if(keccak256(_key,_option)!=OptionList[msg.sender].encryptedOption) _DefaultLose(msg.sender);
@@ -68,7 +72,7 @@ contract RockPaperScissor is TurnBasedGame {
         }
         // if both player option is unlock and valid, execute the game
 	    if(UnlockedValid) ExeuteRockPaperScissor();
-       
+
 	}
 
 
@@ -124,12 +128,12 @@ contract RockPaperScissor is TurnBasedGame {
         }
 	    assert(false); // SANITY CHECK: We should never get here.
     }
-    
+
     //This function is called when the hash value does not match, default lose for sending incorrect key
     function _DefaultLose(address loser) private {
         Game storage game = getGame();
 	    address winner;
-	    
+
 	    if(loser == game.players[0].player)winner = game.players[1].player;
 	    else winner = game.players[0].player;
 
@@ -140,7 +144,7 @@ contract RockPaperScissor is TurnBasedGame {
         game.gameState = 4;
         GameSessionEnded(winner,game.jackpot);
     }
-    
+
     //this function convert string to byte32 for hash comparison
     function stringToBytes32(string memory source) private pure returns (bytes32 result) {
         bytes memory tempEmptyStringTest = bytes(source);
@@ -152,14 +156,14 @@ contract RockPaperScissor is TurnBasedGame {
             result := mload(add(source, 32))
         }
     }
-    
+
     //This function convert 1 2 3 to Rock Paper Scissor;
     function intToOption(int _num) private pure returns(options) {
         if(_num == 1) return options.Rock;
         if(_num == 2) return options.Paper;
         if(_num == 3) return options.Scissor;
     }
-    
+
     //This function Decrypt and record player option base on address given
     function _DecryptOption(address player) private {
         PlayerOptions memory playerOption = OptionList[player];
