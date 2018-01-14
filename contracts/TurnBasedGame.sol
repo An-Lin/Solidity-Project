@@ -28,7 +28,8 @@ contract TurnBasedGame {
     }
 
     function startGame(string name) internal {
-
+        Game memory game_check = getGame();
+        require(game_check.gameState ==4 || game_check.gameState ==0);
         //increment gameId
         Game storage game = gameIdToGame[++gamesPlayed];
         // game id '0' will be reserved and represent a fresh contract.
