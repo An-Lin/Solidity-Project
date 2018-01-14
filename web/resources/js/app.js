@@ -58,9 +58,9 @@ var App = (function() {
 
         return {
             init: function(){
-                checkpoint = App.contracts.CheckPoint(function(err, result){
-                    console.log(result);
-                });
+                // checkpoint = App.contracts.CheckPoint(function(err, result){
+                //     console.log(result);
+                // });
             }
 
         }
