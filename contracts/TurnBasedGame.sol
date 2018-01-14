@@ -27,7 +27,7 @@ contract TurnBasedGame {
         uint id;
     }
 
-    function startGame(string name) internal {
+    function startGame(string name) internal checkGameState (0) {
 
         //increment gameId
         Game storage game = gameIdToGame[gamesPlayed++];
@@ -77,7 +77,7 @@ contract TurnBasedGame {
         require(getGame().gameState ==  _gameState);
         _;
     }
-
+    
     function getPlayerStatus() external view returns(uint gameId, uint gameState, uint gameJackPot){
         Game memory temp_game = getGame();
         gameId =  temp_game.id;
