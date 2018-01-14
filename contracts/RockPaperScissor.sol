@@ -103,7 +103,6 @@ contract RockPaperScissor is TurnBasedGame {
     	        winner = player_one;
 	            loser = player_two;
     	    }
-    	        loser = player_one;
             Balance[winner] += game.jackpot;
             Balance[loser] -= game.jackpot;
             game.gameState = 4;
