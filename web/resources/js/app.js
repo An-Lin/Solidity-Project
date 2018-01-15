@@ -118,7 +118,7 @@ var App = (function() {
                     pass = web3.sha3(UIController.getPassword() + choice);
                     // debug(pass, user, amount);
                     debug("Calling Play.");
-                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether'), gas: 100000});
+                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                 }).then(function(result) {
                     debug("Received Result: ");
                     debug(result);
