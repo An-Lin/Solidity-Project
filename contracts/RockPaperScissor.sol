@@ -31,6 +31,7 @@ contract RockPaperScissor is TurnBasedGame {
 		    //find out the gameId from list:UnmatchGameId. Copy the last unmatchgameId then delete it from UnmatchGameId.
 		    uint id = UnmatchGameId[UnmatchGameId.length-1];
 		    delete UnmatchGameId[UnmatchGameId.length-1];
+		    UnmatchGameId.length --;
 
 		    //player 2 join game, max number of player joined
 		    addressToGameId[msg.sender] = id;
@@ -42,9 +43,9 @@ contract RockPaperScissor is TurnBasedGame {
 		    //send event to notify user to call reveal()
 		    GameKeyReveal(id);
 		    //record valid time for reveal
-		    gameIdToGame[id].validTime = now + 5 minutes;
+		    gameIdToGame[id].validTime = (now + 30 minutes);
 		    //send event request user to reply within this time
-		    RevealValidTime(now + 5 minutes);
+		    RevealValidTime(now + 30 minutes);
 		}
 		//if no avaliable game to join, start a fresh game and add that to unmatchGame list
 		else{
@@ -54,7 +55,7 @@ contract RockPaperScissor is TurnBasedGame {
 		}
 	}
 
-	function reveal(string _key, int _option) public checkGameState (3) {
+	function reveal(string _key, uint _option) public checkGameState (3) {
 	    Game memory current_game = getGame();
 	    require(current_game.gameState == 3 && current_game.validTime !=0);
 
@@ -63,18 +64,30 @@ contract RockPaperScissor is TurnBasedGame {
 
         bool UnlockedValid = false;
         string memory tempStringOption;
-        if(_option==1) tempStringOption="1";
-        else if(_option==2) tempStringOption="2";
-        else if(_option==3) tempStringOption="3";
-        else _DefaultLose(msg.sender);
+        if(_option==uint(1)) tempStringOption="1";
+        else if(_option==uint(2)) tempStringOption="2";
+        else if(_option==uint(3)) tempStringOption="3";
+        else{
+        	_DefaultLose(msg.sender);
+        	Check1(1);
+        } 
+
         //check if they key is valid, it key is not valid, default lose
-        if(keccak256(_key,tempStringOption)!=OptionList[msg.sender].encryptedOption) _DefaultLose(msg.sender);
+        if(keccak256(_key,tempStringOption)!=OptionList[msg.sender].encryptedOption){
+         	_DefaultLose(msg.sender);
+        	Check2(1);
+		}
+
 
         //if your oponent did not reveal within the time frame
-        else if(now>current_game.validTime) _DefaultWin(msg.sender);
+        else if(now>current_game.validTime){
+        	_DefaultWin(msg.sender);
+        	Check3(1);
+        } 
 
         //check if both player reveal their key
         else if((stringToBytes32(OptionList[current_game.players[0].player].key) != 0x0)&&(stringToBytes32(OptionList[current_game.players[1].player].key) != 0x0)){
+        	Check4(1);
             UnlockedValid = true;
             OptionList[msg.sender].option = intToOption(_option);
             //determine playerOne and playerTwo address
@@ -82,7 +95,10 @@ contract RockPaperScissor is TurnBasedGame {
             else _DecryptOption(current_game.players[0].player);
         }
         // if both player option is unlock and valid, execute the game
-	    if(UnlockedValid) ExeuteRockPaperScissor();
+	    if(UnlockedValid){
+	    	Check5(5);
+	    	ExeuteRockPaperScissor();
+	    }
 
 	}
 
@@ -106,13 +122,13 @@ contract RockPaperScissor is TurnBasedGame {
 	        GameSessionEnded(player_two,0);
 	    }
 	    else{
-	        if(OptionList[ player_one].option == _DetermineWinner(OptionList[ player_one].option,OptionList[ player_two].option)){
+	        if(OptionList[ player_one].option == _DetermineWinner(OptionList[player_one].option,OptionList[player_two].option)){
 	            winner = player_one;
 	            loser = player_two;
 	        }
     	    else{
-    	        winner = player_one;
-	            loser = player_two;
+    	        winner = player_two;
+	            loser = player_one;
     	    }
             Balance[winner] += game.jackpot;
             Balance[loser] -= game.jackpot;
@@ -185,7 +201,7 @@ contract RockPaperScissor is TurnBasedGame {
     }
 
     //This function convert 1 2 3 to Rock Paper Scissor;
-    function intToOption(int _num) private pure returns(options) {
+    function intToOption(uint _num) private pure returns(options) {
         if(_num == 1) return options.Rock;
         if(_num == 2) return options.Paper;
         if(_num == 3) return options.Scissor;
