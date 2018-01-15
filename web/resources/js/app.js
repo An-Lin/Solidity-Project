@@ -25,7 +25,7 @@ var App = (function() {
             clear: function() {
                 $nonce.val("");
             },
-            validPassword: function(){
+            validPassword: function() {
                 var result = $nonce.val().length >= MINIMUM_PASSWORD_LENGTH;
                 if (result) {
                     return true;
@@ -33,10 +33,10 @@ var App = (function() {
                 alert("Please choose a password!");
                 return false;
             },
-            getPassword: function(){
+            getPassword: function() {
                 return $nonce.val();
             },
-            validUsername: function(){
+            validUsername: function() {
                 var result = $username.val().length >= MINIMUM_USERNAME_LENGTH;
                 if (result) {
                     return true;
@@ -44,36 +44,28 @@ var App = (function() {
                 alert("Please choose a username!");
                 return false;
             },
-            getUsername: function(){
+            getUsername: function() {
                 return $username.val();
             },
-            getAmount: function(){
+            getAmount: function() {
                 return bet_amount;
             },
             userCanPlay: function() {
                 return this.validPassword() && this.validUsername();
             },
-            attachPlayButtonClickListener: function(func){
+            attachPlayButtonClickListener: function(func) {
                 $playButton.click(func);
             },
-            getUserChoice: function(){
+            getUserChoice: function() {
                 return $('#rps-choice input:radio:checked').val();
             }
         }
     })()
 
-    var Events = (function(){
-        var checkpoint;
+    var Events = {}
 
-        return {
-            init: function(){
-                // checkpoint = App.contracts.CheckPoint(function(err, result){
-                //     console.log(result);
-                // });
-            }
 
-        }
-    })();
+
 
     return {
         web3Provider: null,
@@ -104,7 +96,7 @@ var App = (function() {
 
             return App.bindEvents();
         },
-        play: function(){
+        play: function() {
             if (UIController.userCanPlay()) {
                 //AJAX call
                 console.log("User playing game..");
@@ -117,17 +109,26 @@ var App = (function() {
                     choice = UIController.getUserChoice();
                     pass = web3.sha3(UIController.getPassword() + choice);
                     // console.log(pass, user, amount);
-                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0], value: web3.toWei(UIController.getAmount(), 'ether') });
+                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                 }).then(function(result) {
                     console.log(result);
-                    num = result.c[0];
+                    var found_published_event = false;
+
+                    for (var i = 0; i < result.logs.length; i++) {
+                        var log = result.logs[i];
+
+                        if (log.event == "CheckPoint") {
+                            found_published_event = true;
+                            alert("CheckPoint!");
+                            break;
+                        }
+                    }
                 }).catch(function(err) {
                     console.log(err.message);
                 });
             }
         },
         bindEvents: function() {
-            Events.init();
             UIController.init();
             UIController.attachPlayButtonClickListener(this.play);
         },
