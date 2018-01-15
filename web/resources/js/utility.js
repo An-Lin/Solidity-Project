@@ -3,12 +3,12 @@ var HelperUtil = (function() {
         initWeb3: function(app) {
             if (typeof web3 !== 'undefined') {
                 // Use embedded web3 object if it exists
-                app.web3Provider = web3.currentProvider;
+                App.web3Provider = web3.currentProvider;
                 web3 = new Web3(web3.currentProvider);
             } else {
                 // set custom web3 provider
-                app.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545');
-                web3 = new Web3(app.web3Provider);
+                App.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545');
+                web3 = new Web3(App.web3Provider);
             }
             this.checkWeb3Info();
         },

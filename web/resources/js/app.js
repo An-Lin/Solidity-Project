@@ -118,7 +118,7 @@ var App = (function() {
                     choice = UIController.getUserChoice();
                     pass = web3.sha3(UIController.getPassword() + choice);
                     // debug(pass, user, amount);
-                    checkpoint = RockPaperScissorInstance.CheckPoint();
+                    checkpoint = RockPaperScissorInstance.RevealValidTime();
                     checkpoint.watch(function(error, result) {
                         if (error) {
                             console.log(error);
@@ -130,6 +130,13 @@ var App = (function() {
                     debug("Calling Play.");
                     return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                 }).then(function(result) {
+                    checkpoint.watch(function(error, result) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("Checkpoint!");
+                        }
+                    });
                     debug("Received Result: ");
                     debug(result);
 //                     var found_published_event = false;
