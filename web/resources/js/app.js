@@ -62,19 +62,9 @@ var App = (function() {
         }
     })()
 
-    var Events = {
-        GameSessionCreated: null,
-        GameKeyReveal: null,
-        GameSessionEnded: null,
-        CheckPoint: null,
-        RevealValidTime: null,
-    }
-
 
     const CONTRACTS = ["RockPaperScissor"];
 
-
-    var address = {}
 
     var debug_mode = true;
 
@@ -87,6 +77,14 @@ var App = (function() {
     return {
         web3Provider: null,
         contracts: {},
+        address: {rps: null},
+        events: {
+            GameSessionCreated: null,
+            GameKeyReveal: null,
+            GameSessionEnded: null,
+            CheckPoint: null,
+            RevealValidTime: null,
+        },
 
         init: function() {
             debug("Initializing Web App.");
@@ -108,7 +106,6 @@ var App = (function() {
                         // Get the necessary contract artifact file and instantiate it with truffle-contract.
                         debug("Connection Established to: " + currentContract);
                         App.contracts[currentContract] = TruffleContract(data);
-
                         // Set the provider for our contract.
                         App.contracts[currentContract].setProvider(App.web3Provider);
                         debug(currentContract + " Artifact Saved.");
@@ -164,7 +161,32 @@ var App = (function() {
         bindEvents: function() {
             UIController.init();
             UIController.attachPlayButtonClickListener(this.play);
-            App.contracts.RockPaperScissor
+            debug("User playing game..");
+
+            App.contracts.RockPaperScissor.deployed().then(function(instance) {
+                debug("RPS: Deployed instance recieved.");
+                App.address.rps = instance.address;
+                var temp = App.contracts.RockPaperScissor.at(instance.address);
+                App.events.CheckPoint = temp.CheckPoint().watch(function(err, res){
+                    console.log(res);
+                });
+                App.events.GameSessionCreated = temp.GameSessionCreated().watch(function(err, res){
+                    console.log(res);
+                });
+                App.events.GameKeyReveal = temp.GameKeyReveal().watch(function(err, res){
+                    console.log(res);
+                });
+                App.events.GameSessionEnded = temp.GameSessionEnded().watch(function(err, res){
+                    console.log(res);
+                });
+                App.events.RevealValidTime = temp.RevealValidTime().watch(function(err, res){
+                    console.log(res);
+                });
+
+                return true;
+            }).catch(function(err) {
+                debug(err.message);
+            });
         },
     }
 })()
