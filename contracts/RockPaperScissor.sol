@@ -62,8 +62,13 @@ contract RockPaperScissor is TurnBasedGame {
         OptionList[msg.sender].key = _key;
 
         bool UnlockedValid = false;
+        string memory tempStringOption;
+        if(_option==1) tempStringOption="1";
+        else if(_option==2) tempStringOption="2";
+        else if(_option==3) tempStringOption="3";
+        else _DefaultLose(msg.sender);
         //check if they key is valid, it key is not valid, default lose
-        if(keccak256(_key,_option)!=OptionList[msg.sender].encryptedOption) _DefaultLose(msg.sender);
+        if(keccak256(_key,tempStringOption)!=OptionList[msg.sender].encryptedOption) _DefaultLose(msg.sender);
 
         //if your oponent did not reveal within the time frame
         else if(now>current_game.validTime) _DefaultWin(msg.sender);
@@ -189,9 +194,10 @@ contract RockPaperScissor is TurnBasedGame {
     //This function Decrypt and record player option base on address given
     function _DecryptOption(address player) private {
         PlayerOptions memory playerOption = OptionList[player];
-        int Rock = 1;
-        int Paper = 2;
-        int Scissor = 3;
+        string memory Rock = "1";
+        string memory Paper = "2";
+        string memory Scissor = "3";
+
         //string memory player_key = OptionList[player].key;
         //bytes32 memory player_hash =  OptionList[player].encryptedOption;
         if(playerOption.encryptedOption == keccak256(playerOption.key,Rock)) OptionList[player].option = options.Rock;
