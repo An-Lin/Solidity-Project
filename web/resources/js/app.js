@@ -112,17 +112,17 @@ var App = (function() {
                     return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                 }).then(function(result) {
                     console.log(result);
-                    var found_published_event = false;
-
-                    for (var i = 0; i < result.logs.length; i++) {
-                        var log = result.logs[i];
-
-                        if (log.event == "CheckPoint") {
-                            found_published_event = true;
-                            alert("CheckPoint!");
-                            break;
-                        }
-                    }
+                    // var found_published_event = false;
+                    //
+                    // for (var i = 0; i < result.logs.length; i++) {
+                    //     var log = result.logs[i];
+                    //
+                    //     if (log.event == "CheckPoint") {
+                    //         found_published_event = true;
+                    //         alert("CheckPoint!");
+                    //         break;
+                    //     }
+                    // }
                 }).catch(function(err) {
                     console.log(err.message);
                 });
