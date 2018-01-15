@@ -63,6 +63,7 @@ var App = (function() {
     })()
 
     var Events = {}
+    var checkpoint;
 
     var debug_mode = true;
 
@@ -117,22 +118,31 @@ var App = (function() {
                     choice = UIController.getUserChoice();
                     pass = web3.sha3(UIController.getPassword() + choice);
                     // debug(pass, user, amount);
+                    checkpoint = RockPaperScissorInstance.CheckPoint();
+                    checkpoint.watch(function(error, result) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("Checkpoint!");
+                        }
+                    });
+                    debugger;
                     debug("Calling Play.");
                     return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                 }).then(function(result) {
                     debug("Received Result: ");
                     debug(result);
-                    var found_published_event = false;
-
-                    for (var i = 0; i < result.logs.length; i++) {
-                        var log = result.logs[i];
-
-                        if (log.event == "CheckPoint") {
-                            found_published_event = true;
-                            alert("CheckPoint!");
-                            break;
-                        }
-                    }
+//                     var found_published_event = false;
+//
+//                     for (var i = 0; i < result.logs.length; i++) {
+//                         var log = result.logs[i];
+//
+//                         if (log.event == "CheckPoint") {
+//                             found_published_event = true;
+// d                            alert("CheckPoint!");
+//                             break;
+//                         }
+//                     }
                 }).catch(function(err) {
                     debug(err.message);
                 });
