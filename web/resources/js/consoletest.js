@@ -18,8 +18,8 @@ var game = (function(){
             rps.reveal(p1pass, p1Choice, {from: web3.eth.accounts[p1account], gas: 2100000});
             rps.reveal(p2pass, p2Choice, {from: web3.eth.accounts[p2account], gas: 2100000});
         },
-        withdraw: function(player){
-            rps.withdraw({from: web3.eth.accounts[player], gas: 2100000});
+        withdraw: function(account){
+            rps.withdraw({from: web3.eth.accounts[account], gas: 2100000});
         },
         changeAccount: function(p1, p2){
             p1account = p1;
@@ -33,7 +33,7 @@ var game = (function(){
             return rps;
         },
         help: function(){
-            console.log("init: (string) contract address if not 0x345ca3e014aaf5dca488057592ee47305d9b3e10\nplay: ()\nreveal: ()\nwithdraw: (int player) - 1 or 2\nchangeChoice: (int) player 1 choice, (int) player 2 choice\nrpsinstance: ()  gets raw instance.");
+            console.log("init: (string) contract address if not 0x345ca3e014aaf5dca488057592ee47305d9b3e10\nplay: ()\nreveal: ()\nwithdraw: (int account) - default accounts are 1 and 2\nchangeChoice: (int) player 1 choice, (int) player 2 choice\nrpsinstance: ()  gets raw instance.");
         }
     }
 })();
