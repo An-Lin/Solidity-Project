@@ -15,11 +15,6 @@ contract TurnBasedGame {
     event GameSessionEnded(address winner, uint gameJackPot);
     event CheckPoint(uint error);
     event RevealValidTime(uint time);
-    event Check1(uint error);
-    event Check2(uint error);
-    event Check3(uint error);
-    event Check4(uint error);
-    event Check5(uint error);
 
 
     struct Player {

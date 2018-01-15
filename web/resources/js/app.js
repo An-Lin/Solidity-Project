@@ -62,8 +62,19 @@ var App = (function() {
         }
     })()
 
-    var Events = {}
-    var checkpoint;
+    var Events = {
+        GameSessionCreated: null,
+        GameKeyReveal: null,
+        GameSessionEnded: null,
+        CheckPoint: null,
+        RevealValidTime: null,
+    }
+
+
+    const CONTRACTS = ["RockPaperScissor"];
+
+
+    var address = {}
 
     var debug_mode = true;
 
@@ -89,20 +100,26 @@ var App = (function() {
         },
 
         initContract: function() {
-            debug("Instantiating Smart Contract Artifact...");
-            $.getJSON('/web/contracts/RockPaperScissor.json', function(data) {
-                // Get the necessary contract artifact file and instantiate it with truffle-contract.
-                debug("Connection Established..");
-                var RockPaperScissorArtifact = data;
-                App.contracts.RockPaperScissor = TruffleContract(RockPaperScissorArtifact);
+            debug("Retrieving Smart Contract Artifacts...");
+            for (var i = 0; i < CONTRACTS.length; i++) {
+                (function(i){
+                    var currentContract = CONTRACTS[i];
+                    $.getJSON('/web/contracts/' + currentContract + ".json", function(data) {
+                        // Get the necessary contract artifact file and instantiate it with truffle-contract.
+                        debug("Connection Established to: " + currentContract);
+                        App.contracts[currentContract] = TruffleContract(data);
 
-                // Set the provider for our contract.
-                App.contracts.RockPaperScissor.setProvider(App.web3Provider);
-                debug("Artifact Saved.");
-                return true;
-            });
+                        // Set the provider for our contract.
+                        App.contracts[currentContract].setProvider(App.web3Provider);
+                        debug(currentContract + " Artifact Saved.");
+                        if (i == CONTRACTS.length -1) {
+                            return App.bindEvents();
+                        }
+                    });
+                })(i);
+            }
 
-            return App.bindEvents();
+            return true;
         },
         play: function() {
             if (UIController.userCanPlay()) {
@@ -139,17 +156,6 @@ var App = (function() {
                     });
                     debug("Received Result: ");
                     debug(result);
-//                     var found_published_event = false;
-//
-//                     for (var i = 0; i < result.logs.length; i++) {
-//                         var log = result.logs[i];
-//
-//                         if (log.event == "CheckPoint") {
-//                             found_published_event = true;
-// d                            alert("CheckPoint!");
-//                             break;
-//                         }
-//                     }
                 }).catch(function(err) {
                     debug(err.message);
                 });
@@ -158,6 +164,7 @@ var App = (function() {
         bindEvents: function() {
             UIController.init();
             UIController.attachPlayButtonClickListener(this.play);
+            App.contracts.RockPaperScissor
         },
     }
 })()
