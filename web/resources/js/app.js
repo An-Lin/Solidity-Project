@@ -64,33 +64,40 @@ var App = (function() {
 
     var Events = {}
 
+    var debug_mode = true;
 
-
+    function debug(str) {
+        if (debug_mode) {
+            console.log(str);
+        }
+    }
 
     return {
         web3Provider: null,
         contracts: {},
 
         init: function() {
-            console.log("Initializing Web App.");
+            debug("Initializing Web App.");
             return App.initWeb3();
         },
         initWeb3: function() {
-            console.log("Connecting to Web3 Provider..");
+            debug("Connecting to Web3 Provider..");
             // Initialize web3 and set the provider
             HelperUtil.initWeb3(App);
             return App.initContract();
         },
 
         initContract: function() {
-            console.log("Instantiating Smart Contract Artifact...");
+            debug("Instantiating Smart Contract Artifact...");
             $.getJSON('/web/contracts/RockPaperScissor.json', function(data) {
                 // Get the necessary contract artifact file and instantiate it with truffle-contract.
+                debug("Connection Established..");
                 var RockPaperScissorArtifact = data;
                 App.contracts.RockPaperScissor = TruffleContract(RockPaperScissorArtifact);
 
                 // Set the provider for our contract.
                 App.contracts.RockPaperScissor.setProvider(App.web3Provider);
+                debug("Artifact Saved.");
                 return true;
             });
 
@@ -99,32 +106,35 @@ var App = (function() {
         play: function() {
             if (UIController.userCanPlay()) {
                 //AJAX call
-                console.log("User playing game..");
+                debug("User playing game..");
 
                 var RockPaperScissorInstance;
 
                 App.contracts.RockPaperScissor.deployed().then(function(instance) {
+                    debug("RPS: Deployed instance recieved.");
                     RockPaperScissorInstance = instance;
                     user = UIController.getUsername();
                     choice = UIController.getUserChoice();
                     pass = web3.sha3(UIController.getPassword() + choice);
-                    // console.log(pass, user, amount);
-                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
+                    // debug(pass, user, amount);
+                    debug("Calling Play.");
+                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether'), gas: 100000});
                 }).then(function(result) {
-                    console.log(result);
-                    // var found_published_event = false;
-                    //
-                    // for (var i = 0; i < result.logs.length; i++) {
-                    //     var log = result.logs[i];
-                    //
-                    //     if (log.event == "CheckPoint") {
-                    //         found_published_event = true;
-                    //         alert("CheckPoint!");
-                    //         break;
-                    //     }
-                    // }
+                    debug("Received Result: ");
+                    debug(result);
+                    var found_published_event = false;
+
+                    for (var i = 0; i < result.logs.length; i++) {
+                        var log = result.logs[i];
+
+                        if (log.event == "CheckPoint") {
+                            found_published_event = true;
+                            alert("CheckPoint!");
+                            break;
+                        }
+                    }
                 }).catch(function(err) {
-                    console.log(err.message);
+                    debug(err.message);
                 });
             }
         },
