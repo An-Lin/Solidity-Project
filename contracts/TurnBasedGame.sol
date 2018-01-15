@@ -49,7 +49,6 @@ contract TurnBasedGame {
 
     function getGameId() internal view returns (uint){
         uint id = addressToGameId[msg.sender];
-        require(id != 0);
         return id;
     }
 

@@ -42,9 +42,9 @@ contract RockPaperScissor is TurnBasedGame {
 		    //send event to notify user to call reveal()
 		    GameKeyReveal(id);
 		    //record valid time for reveal
-		    gameIdToGame[id].validTime = now + 1 hours;
+		    gameIdToGame[id].validTime = now + 5 minutes;
 		    //send event request user to reply within this time
-		    RevealValidTime(now + 1 hours);
+		    RevealValidTime(now + 5 minutes);
 		}
 		//if no avaliable game to join, start a fresh game and add that to unmatchGame list
 		else{
