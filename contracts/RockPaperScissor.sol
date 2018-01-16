@@ -20,6 +20,14 @@ contract RockPaperScissor is TurnBasedGame {
 		return gamesPlayed;
 	}
 
+	function fireEvents() public {
+		GameSessionCreated(1234);
+	    GameKeyReveal(4321);
+	    GameSessionEnded(address(0), 2000000000000000000);
+	    CheckPoint(404);
+	    RevealValidTime(now);
+	}
+
 	function play(bytes32 _encryptedOption, string _name) public payable {
 	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
 		CheckPoint(1); // Made it into the function
