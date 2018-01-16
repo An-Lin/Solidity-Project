@@ -140,7 +140,6 @@ var App = (function() {
                             console.log("Checkpoint!");
                         }
                     });
-                    debugger;
                     debug("Calling Play.");
                     return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                 }).then(function(result) {
