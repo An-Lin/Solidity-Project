@@ -59,6 +59,9 @@ var App = (function() {
             },
             getUserChoice: function() {
                 return $('#rps-choice input:radio:checked').val();
+            },
+            triggerModal: function(){
+                $('#gameResultModal').modal('show');
             }
         }
     })()
@@ -70,10 +73,20 @@ var App = (function() {
             WAITING:1,
             REVEAL:2,
         }
+        const SECONDS = 1000;
         var mode = MODES.IDLE;
         var user;
         var choice;
         var pass;
+
+        function timeout() {
+            setTimeout(function(func) {
+                func();
+                if (mode == MODES.WAITING) {
+                    timeout();
+                }
+            }, 20 * SECONDS);
+        }
 
         return {
             modes: function(){
@@ -82,8 +95,11 @@ var App = (function() {
             getMode: function(){
                 return mode;
             },
-            setMode: function(val){
+            setMode: function(val, func){
                 mode = val;
+                if (mode == MODES.WAITING) {
+                    timeout(func);
+                }
             }
         }
     }());
