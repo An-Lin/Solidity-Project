@@ -166,6 +166,7 @@ var App = (function() {
                 debug("RPS: Deployed instance recieved.");
                 App.address.rps = instance.address;
                 var temp = App.contracts.RockPaperScissor.at(instance.address);
+
                 App.events.CheckPoint = temp.CheckPoint().watch(function(err, res){
                     console.log(res);
                 });
