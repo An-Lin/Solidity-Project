@@ -1,5 +1,6 @@
 var App = (function() {
     var UIController = (function() {
+        'use strict';
         const MINIMUM_PASSWORD_LENGTH = 3; // CHANGE FOR PRODUCTION
         const MINIMUM_USERNAME_LENGTH = 3; // CHANGE FOR PRODUCTION
         var bet_amount = '0.1'; // CHANGE FOR PRODUCTION
@@ -62,6 +63,30 @@ var App = (function() {
         }
     })()
 
+    var GameController = (function() {
+        'use strict';
+        const MODES = {
+            IDLE:0,
+            WAITING:1,
+            REVEAL:2,
+        }
+        var mode = MODES.IDLE;
+        var user;
+        var choice;
+        var pass;
+
+        return {
+            modes: function(){
+                return MODES;
+            },
+            getMode: function(){
+                return mode;
+            },
+            setMode: function(val){
+                mode = val;
+            }
+        }
+    }());
 
     const CONTRACTS = ["RockPaperScissor"];
 
@@ -131,25 +156,60 @@ var App = (function() {
                     user = UIController.getUsername();
                     choice = UIController.getUserChoice();
                     pass = web3.sha3(UIController.getPassword() + choice);
-                    // debug(pass, user, amount);
-                    checkpoint = RockPaperScissorInstance.RevealValidTime();
-                    checkpoint.watch(function(error, result) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log("Checkpoint!");
-                        }
-                    });
                     debug("Calling Play.");
                     return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                 }).then(function(result) {
-                    checkpoint.watch(function(error, result) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log("Checkpoint!");
+                    for (var i = 0; i < result.logs.length; i++) {
+                        var log = result.logs[i];
+
+                        switch (log.event) {
+                            case "GameKeyReveal":
+                                alert("Joined Existing Game.");
+                                break;
+                            case "GameSessionCreated":
+                                alert("Created New Game.");
+                                break;
+                            default:
+
                         }
-                    });
+                      }
+                    debug("Received Result: ");
+                    debug(result);
+                }).catch(function(err) {
+                    debug(err.message);
+                });
+            }
+        },
+        reveal: function() {
+            if (GameController.getMode() == GameController.modes.REVEAL) {
+                //AJAX call
+                debug("User playing game..");
+
+                var RockPaperScissorInstance;
+
+                App.contracts.RockPaperScissor.deployed().then(function(instance) {
+                    debug("RPS: Deployed instance recieved.");
+                    RockPaperScissorInstance = instance;
+                    user = UIController.getUsername();
+                    choice = UIController.getUserChoice();
+                    pass = web3.sha3(UIController.getPassword() + choice);
+                    debug("Calling Play.");
+                    return RockPaperScissorInstance.reveal(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
+                }).then(function(result) {
+                    for (var i = 0; i < result.logs.length; i++) {
+                        var log = result.logs[i];
+
+                        switch (log.event) {
+                            case "GameKeyReveal":
+                                alert("Joined Existing Game.");
+                                break;
+                            case "GameSessionCreated":
+                                alert("Created New Game.");
+                                break;
+                            default:
+
+                        }
+                      }
                     debug("Received Result: ");
                     debug(result);
                 }).catch(function(err) {
