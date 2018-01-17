@@ -28,7 +28,7 @@ contract RockPaperScissor is TurnBasedGame {
 	    RevealValidTime(now);
 	}
 
-	function play(bytes32 _encryptedOption, string _name) public payable {
+	function play(bytes32 _encryptedOption, string _name) public payable returns (uint ret) {
 	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
 		CheckPoint(1); // Made it into the function
 		require(msg.value==100000000000000000 || Balance[msg.sender] > 1000000000000000000);
@@ -58,12 +58,14 @@ contract RockPaperScissor is TurnBasedGame {
 		    gameIdToGame[id].validTime = (now + 30 minutes);
 		    //send event request user to reply within this time
 		    RevealValidTime(now + 30 minutes);
+            return 2;
 		}
 		//if no avaliable game to join, start a fresh game and add that to unmatchGame list
 		else{
 		    OptionList[msg.sender].encryptedOption = _encryptedOption;
 		    startGame(_name);
 		    UnmatchGameId.push(gamesPlayed);
+            return 1;
 		}
 	}
 
