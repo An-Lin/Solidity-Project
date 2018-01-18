@@ -48,6 +48,9 @@ contract RockPaperScissor is TurnBasedGame {
 		    //player 2 join game, max number of player joined
 		    addressToGameId[msg.sender] = id;
 		    addPlayer(id, _name);
+		    //we have hardcoded wager amount to be 0.1ETH
+		    gameIdToGame[id].jackpot+=100000000000000000;
+		    Balance[msg.sender] -= 100000000000000000;
 		    //we can skip setting gameState to 2 since we have user input when joined game
 		    //gameIdToGame[id].gameState = 2;
 		    //Both players already submit their option, move to gameState 3 to request key to reveal
@@ -56,6 +59,7 @@ contract RockPaperScissor is TurnBasedGame {
 		    GameKeyReveal(id);
 		    //record valid time for reveal
 		    gameIdToGame[id].validTime = (now + 30 minutes);
+
 		    //send event request user to reply within this time
 		    RevealValidTime(now + 30 minutes);
             return 2;
@@ -126,9 +130,6 @@ contract RockPaperScissor is TurnBasedGame {
 	    address winner;
 	    address loser;
 
-	    //we have hardcoded wager amount to be 0.1ETH
-	    game.jackpot = 100000000000000000;
-
 	    //if both player have the same option, no one wins
 	    if(OptionList[player_one].option == OptionList[player_two].option ){
 	        //brodcast draw result
@@ -145,7 +146,6 @@ contract RockPaperScissor is TurnBasedGame {
 	            loser = player_one;
     	    }
             Balance[winner] += game.jackpot;
-            Balance[loser] -= game.jackpot;
             game.gameState = 4;
             GameSessionEnded(winner,game.jackpot);
 	    }
@@ -177,10 +177,7 @@ contract RockPaperScissor is TurnBasedGame {
 	    if(loser == game.players[0].player)winner = game.players[1].player;
 	    else winner = game.players[0].player;
 
-	    //we have hardcoded wager amount to be 0.1ETH
-	    game.jackpot = 100000000000000000;
 	    Balance[winner] += game.jackpot;
-        Balance[loser] -= game.jackpot;
         game.gameState = 4;
         GameSessionEnded(winner,game.jackpot);
     }
@@ -193,10 +190,7 @@ contract RockPaperScissor is TurnBasedGame {
 	    if(winner == game.players[0].player) loser = game.players[1].player;
 	    else loser = game.players[0].player;
 
-	    //we have hardcoded wager amount to be 0.1ETH
-	    game.jackpot = 100000000000000000;
 	    Balance[winner] += game.jackpot;
-        Balance[loser] -= game.jackpot;
         game.gameState = 4;
         GameSessionEnded(winner,game.jackpot);
         game.jackpot = 0;
@@ -234,5 +228,19 @@ contract RockPaperScissor is TurnBasedGame {
         else if(playerOption.encryptedOption == keccak256(playerOption.key,Paper)) OptionList[player].option = options.Paper;
         else if(playerOption.encryptedOption == keccak256(playerOption.key,Scissor)) OptionList[player].option = options.Scissor;
         else _DefaultLose(player);
+    }
+
+    //Player can cancel game if nobody join after X amount of time (Eg X=1 hour). This function have to be game specific since each game have their own UnmatchGameId
+    function cancelGame(uint id) public {
+        Game storage game= gameIdToGame[id];
+        require(game.gameState ==1 && game.players[0].player == msg.sender && now>(game.createdTime + 1 hours));
+        Balance[msg.sender] += game.jackpot;
+        game.gameState=4;
+        GameSessionEnded(msg.sender,game.jackpot);
+        game.jackpot = 0;
+        //remove game from unmatch, right now we assume it is the latest
+        require(id == UnmatchGameId[UnmatchGameId.length-1])
+        delete UnmatchGameId[UnmatchGameId.length-1];
+		UnmatchGameId.length --;
     }
 }

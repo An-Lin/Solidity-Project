@@ -28,6 +28,7 @@ contract TurnBasedGame {
         uint jackpot;
         uint id;
         uint validTime;
+        uint createdTime;
     }
 
     function startGame(string name) internal {
@@ -39,8 +40,11 @@ contract TurnBasedGame {
         assert(gamesPlayed > 0);
         game.players.push(Player(msg.sender, name));
         game.gameState = 1;
-        game.jackpot = msg.value;
+        // we have hardcoded wager amount to be 0.1ETH
+        game.jackpot = 100000000000000000;
+        Balance[msg.sender] -= 100000000000000000;
         game.id = gamesPlayed;
+        game.createdTime = now;
 
         addressToGameId[msg.sender] = gamesPlayed;
 
