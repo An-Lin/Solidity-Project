@@ -180,6 +180,7 @@ contract RockPaperScissor is TurnBasedGame {
 	    Balance[winner] += game.jackpot;
         game.gameState = 4;
         GameSessionEnded(winner,game.jackpot);
+        game.jackpot = 0;
     }
 
     //This function is called when the opponent did not call reveal() within x time, default win sender
