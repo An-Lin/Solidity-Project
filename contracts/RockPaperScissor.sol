@@ -240,7 +240,7 @@ contract RockPaperScissor is TurnBasedGame {
         GameSessionEnded(msg.sender,game.jackpot);
         game.jackpot = 0;
         //remove game from unmatch, right now we assume it is the latest
-        require(id == UnmatchGameId[UnmatchGameId.length-1])
+        require(id == UnmatchGameId[UnmatchGameId.length-1]);
         delete UnmatchGameId[UnmatchGameId.length-1];
 		UnmatchGameId.length --;
     }
