@@ -31,6 +31,8 @@ contract RockPaperScissor is TurnBasedGame {
 	function play(bytes32 _encryptedOption, string _name) public payable returns (uint ret) {
 	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
 		CheckPoint(1); // Made it into the function
+		Game memory check_game = getGame();
+		require(check_game.gameState == 4 || check_game.gameState == 0);
 		require(msg.value==100000000000000000 || Balance[msg.sender] > 1000000000000000000);
 	    require(_encryptedOption.length > 1);
 	    Balance[msg.sender] += msg.value;
@@ -65,7 +67,7 @@ contract RockPaperScissor is TurnBasedGame {
             return 2;
 		}
 		//if no avaliable game to join, start a fresh game and add that to unmatchGame list
-		else{
+		else if (UnmatchGameId.length == 0 ){
 		    OptionList[msg.sender].encryptedOption = _encryptedOption;
 		    startGame(_name);
 		    UnmatchGameId.push(gamesPlayed);
