@@ -76,8 +76,7 @@ var App = (function() {
 
         function timeout() {
             setTimeout(function() {
-                if (mode == GameController.modes().WAITING) {
-                    App.checkForPlayerJoined();
+                if (!App.checkForPlayerJoined()) {
                     timeout();
                 }
             }, 20 * SECONDS);
@@ -217,7 +216,7 @@ var App = (function() {
             var funcs = {
                 call: function(instance) {
                     choice = UIController.getUserChoice();
-                    pass = web3.sha3(UIController.getPassword() + choice);
+                    pass = UIController.getPassword();
                     return instance.reveal(pass, choice);
                 },
                 callback: function(result) {
@@ -250,7 +249,13 @@ var App = (function() {
                     callback: function(result) {
                         debug(result);
                         debugger;
-                        GameController.setMode(GameController.modes().REVEAL);
+                        if (result[1].c[0] === 3) {
+                            GameController.setMode(GameController.modes().REVEAL);
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
                     }
                 }
                 App.callContract(dbg, funcs);
