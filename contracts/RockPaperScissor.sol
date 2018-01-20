@@ -139,7 +139,7 @@ contract RockPaperScissor is TurnBasedGame {
 	        GameSessionEnded(player_two,0);
 	        Balance[player_one] += 100000000000000000;
 	        Balance[player_two] += 100000000000000000;
-	        game.winner=address(0);
+	        GameSessionEnded(winner,uint(0));
 	    }
 	    else{
 	        if(OptionList[ player_one].option == _DetermineWinner(OptionList[player_one].option,OptionList[player_two].option)){
@@ -152,9 +152,9 @@ contract RockPaperScissor is TurnBasedGame {
     	    }
     	    game.winner=winner;
             Balance[winner] += game.jackpot;
-            game.gameState = 4;
             GameSessionEnded(winner,game.jackpot);
 	    }
+	    game.gameState = 4;
 	    game.jackpot = 0;
     }
 
