@@ -12,6 +12,7 @@ contract RockPaperScissor is TurnBasedGame {
         string key;
         options option;
     }
+    PlayerOptions blank;
 
 	function RockPaperScissor() public{
 	}
@@ -159,6 +160,8 @@ contract RockPaperScissor is TurnBasedGame {
 	    }
 	    game.gameState = 4;
 	    game.jackpot = 0;
+	    OptionList[player_two]=blank;
+	    OptionList[player_one]=blank;
     }
 
     //This function would return winner option
@@ -191,6 +194,8 @@ contract RockPaperScissor is TurnBasedGame {
         game.gameState = 4;
         GameSessionEnded(winner,game.jackpot);
         game.jackpot = 0;
+	    OptionList[game.players[0].player]=blank;
+	    OptionList[game.players[1].player]=blank;
     }
 
     //This function is called when the opponent did not call reveal() within x time, default win sender
@@ -206,6 +211,9 @@ contract RockPaperScissor is TurnBasedGame {
         game.gameState = 4;
         GameSessionEnded(winner,game.jackpot);
         game.jackpot = 0;
+
+	    OptionList[game.players[0].player]=blank;
+	    OptionList[game.players[1].player]=blank;
     }
 
     //this function convert string to byte32 for hash comparison
