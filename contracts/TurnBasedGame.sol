@@ -29,6 +29,7 @@ contract TurnBasedGame {
         uint id;
         uint validTime;
         uint createdTime;
+        address winner;
     }
 
     function startGame(string name) internal {
@@ -85,10 +86,15 @@ contract TurnBasedGame {
         _;
     }
 
-    function getPlayerStatus() external view returns(uint gameId, uint gameState, uint gameJackPot){
+    function getPlayerStatus() external view returns(uint gameId, uint gameState, uint gameJackPot, address winner){
         Game memory temp_game = getGame();
         gameId =  temp_game.id;
         gameState =  temp_game.gameState;
         gameJackPot =  temp_game.jackpot;
+        winner =  temp_game.winner;
+    }
+
+    function getCurrentGameWinner() external view returns(address winner){
+        winner =  getGame().winner;
     }
 }
