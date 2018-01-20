@@ -64,25 +64,20 @@ var App = (function() {
                 $('#gameResultModal').modal('show');
             }
         }
-    })()
+    })();
 
     var GameController = (function() {
         'use strict';
-        const MODES = {
-            IDLE:0,
-            WAITING:1,
-            REVEAL:2,
-        }
         const SECONDS = 1000;
-        var mode = MODES.IDLE;
+        var mode = 0;
         var user;
         var choice;
         var pass;
 
         function timeout() {
-            setTimeout(function(func) {
-                func();
-                if (mode == MODES.WAITING) {
+            setTimeout(function() {
+                if (mode == GameController.modes().WAITING) {
+                    App.checkForPlayerJoined();
                     timeout();
                 }
             }, 20 * SECONDS);
@@ -90,19 +85,26 @@ var App = (function() {
 
         return {
             modes: function(){
-                return MODES;
+                return {
+                    IDLE:0,
+                    WAITING:1,
+                    REVEAL:2,
+                }
             },
             getMode: function(){
                 return mode;
             },
-            setMode: function(val, func){
+            setMode: function(val){
                 mode = val;
-                if (mode == MODES.WAITING) {
-                    timeout(func);
+                if (mode == GameController.modes().WAITING) {
+                    timeout();
+                }
+                else if (mode == GameController.modes().REVEAL) {
+                    App.reveal();
                 }
             }
         }
-    }());
+    })();
 
     const CONTRACTS = ["RockPaperScissor"];
 
@@ -159,113 +161,130 @@ var App = (function() {
 
             return true;
         },
-        play: function() {
-            if (UIController.userCanPlay()) {
-                //AJAX call
-                debug("User playing game..");
-
-                var RockPaperScissorInstance;
-
-                App.contracts.RockPaperScissor.deployed().then(function(instance) {
-                    debug("RPS: Deployed instance recieved.");
-                    RockPaperScissorInstance = instance;
-                    user = UIController.getUsername();
-                    choice = UIController.getUserChoice();
-                    pass = web3.sha3(UIController.getPassword() + choice);
-                    debug("Calling Play.");
-                    return RockPaperScissorInstance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
-                }).then(function(result) {
-                    for (var i = 0; i < result.logs.length; i++) {
-                        var log = result.logs[i];
-
-                        switch (log.event) {
-                            case "GameKeyReveal":
-                                alert("Joined Existing Game.");
-                                break;
-                            case "GameSessionCreated":
-                                alert("Created New Game.");
-                                break;
-                            default:
-
-                        }
-                      }
-                    debug("Received Result: ");
-                    debug(result);
-                }).catch(function(err) {
+        callContract: function(debugmsg, funcs){
+                debug(debugmsg.M1);
+                App.contracts.RockPaperScissor.deployed().then(funcs.call).then(function(result){
+                    debug(debugmsg.M2);
+                    return result;
+                }).then(funcs.callback).catch(function(err) {
                     debug(err.message);
                 });
+        },
+        play: function() {
+            if (UIController.userCanPlay()) {
+                var dbg = {
+                    M1: "User playing game..",
+                    M2: "Received Result: ",
+                }
+                var funcs = {
+                    call: function(instance){
+                        user = UIController.getUsername();
+                        choice = UIController.getUserChoice();
+                        pass = web3.sha3(UIController.getPassword() + choice);
+                        return instance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
+                    },
+                    callback: function(result){
+                        for (var i = 0; i < result.logs.length; i++) {
+                            var log = result.logs[i];
+
+                            switch (log.event) {
+                                case "GameKeyReveal":
+                                    alert("Joined Existing Game.");
+                                    GameController.setMode(GameController.modes().REVEAL);
+                                    break;
+                                case "GameSessionCreated":
+                                    alert("Created New Game.");
+                                    debugger;
+                                    GameController.setMode(GameController.modes().WAITING);
+                                    break;
+                                default:
+
+                            }
+                          }
+                          debug(result);
+                    }
+                }
+
+                App.callContract(dbg, funcs);
             }
         },
         reveal: function() {
-            if (GameController.getMode() == GameController.modes.REVEAL) {
-                //AJAX call
-                debug("User playing game..");
-
-                var RockPaperScissorInstance;
-
-                App.contracts.RockPaperScissor.deployed().then(function(instance) {
-                    debug("RPS: Deployed instance recieved.");
-                    RockPaperScissorInstance = instance;
-                    user = UIController.getUsername();
+        if (GameController.getMode() == GameController.modes().REVEAL) {
+            var dbg = {
+                M1: "Revealing hand..",
+                M2: "Received Result: ",
+            }
+            var funcs = {
+                call: function(instance) {
                     choice = UIController.getUserChoice();
                     pass = web3.sha3(UIController.getPassword() + choice);
-                    debug("Calling Play.");
-                    return RockPaperScissorInstance.reveal(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
-                }).then(function(result) {
+                    return instance.reveal(pass, choice);
+                },
+                callback: function(result) {
                     for (var i = 0; i < result.logs.length; i++) {
                         var log = result.logs[i];
-
                         switch (log.event) {
-                            case "GameKeyReveal":
-                                alert("Joined Existing Game.");
-                                break;
-                            case "GameSessionCreated":
-                                alert("Created New Game.");
+                            case "GameSessionEnded":
+                                alert("Game has Ended");
+                                debug(log.event);
                                 break;
                             default:
 
                         }
-                      }
-                    debug("Received Result: ");
+                    }
                     debug(result);
-                }).catch(function(err) {
-                    debug(err.message);
-                });
+                }
+            }
+            App.callContract(dbg, funcs);
+        }},
+        checkForPlayerJoined: function() {
+            if (GameController.getMode() == GameController.modes().WAITING) {
+                var dbg = {
+                    M1: "Getting Player Status",
+                    M2: "Received Result: ",
+                }
+                var funcs = {
+                    call: function(instance) {
+                        return instance.getPlayerStatus();
+                    },
+                    callback: function(result) {
+                        debug(result);
+                        debugger;
+                        GameController.setMode(GameController.modes().REVEAL);
+                    }
+                }
+                App.callContract(dbg, funcs);
             }
         },
         bindEvents: function() {
             UIController.init();
             UIController.attachPlayButtonClickListener(this.play);
-            debug("User playing game..");
-
-            App.contracts.RockPaperScissor.deployed().then(function(instance) {
-                debug("RPS: Deployed instance recieved.");
-                App.address.rps = instance.address;
-                var temp = App.contracts.RockPaperScissor.at(instance.address);
-
-                App.events.CheckPoint = temp.CheckPoint().watch(function(err, res){
-                    console.log(res);
-                });
-                App.events.GameSessionCreated = temp.GameSessionCreated().watch(function(err, res){
-                    console.log(res);
-                });
-                App.events.GameKeyReveal = temp.GameKeyReveal().watch(function(err, res){
-                    console.log(res);
-                });
-                App.events.GameSessionEnded = temp.GameSessionEnded().watch(function(err, res){
-                    console.log(res);
-                });
-                App.events.RevealValidTime = temp.RevealValidTime().watch(function(err, res){
-                    console.log(res);
-                });
-
-                return true;
-            }).catch(function(err) {
-                debug(err.message);
-            });
-        },
+            var dbg = {
+                M1: "Initializing event listeners..",
+                M2: "Initialized..",
+            }
+            var funcs = {
+                call: function(instance) {
+                    App.address.rps = instance.address;
+                    var temp = App.contracts.RockPaperScissor.at(instance.address);
+                    function logFunc(err, res){
+                        console.log(res);
+                    }
+                    App.events.CheckPoint = temp.CheckPoint().watch(logFunc);
+                    App.events.GameSessionCreated = temp.GameSessionCreated().watch(logFunc);
+                    App.events.GameKeyReveal = temp.GameKeyReveal().watch(logFunc);
+                    App.events.GameSessionEnded = temp.GameSessionEnded().watch(logFunc);
+                    App.events.RevealValidTime = temp.RevealValidTime().watch(logFunc);
+                    return instance;
+                },
+                callback: function(result) {
+                    return result;
+                }
+            }
+            App.callContract(dbg, funcs);
+        }
     }
-})()
+})();
 
 $(window).on('load', function() {
     App.init();

@@ -38,5 +38,8 @@ var HelperUtil = (function() {
                 }
             });
         },
+        dummy: function(){
+            return;
+        }
     }
 })()
