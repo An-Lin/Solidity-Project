@@ -15,6 +15,7 @@ contract TurnBasedGame {
     event GameSessionEnded(address winner, uint gameJackPot);
     event CheckPoint(uint error);
     event RevealValidTime(uint time);
+    event WaitingForPlayer2(bool waiting);
 
 
     struct Player {

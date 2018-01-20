@@ -119,6 +119,9 @@ contract RockPaperScissor is TurnBasedGame {
 	    	CheckPoint(5);
 	    	ExeuteRockPaperScissor();
 	    }
+		else{
+			WaitingForPlayer2(true);
+		}
 
 	}
 
