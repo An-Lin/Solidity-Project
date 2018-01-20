@@ -4,7 +4,7 @@ var App = (function() {
         const MINIMUM_PASSWORD_LENGTH = 3; // CHANGE FOR PRODUCTION
         const MINIMUM_USERNAME_LENGTH = 3; // CHANGE FOR PRODUCTION
         var bet_amount = '0.1'; // CHANGE FOR PRODUCTION
-        var $nonce, $username, $playButton, $userChoice;
+        var $nonce, $username, $playButton, $userChoice, $copymnemonic;
 
         var RPS = {
             ROCK: 1,
@@ -16,11 +16,14 @@ var App = (function() {
             $nonce = $("#nonce");
             $username = $("#username");
             $playButton = $("#play-button");
+            $copymnemonic = $("#copy-mnemonic-button");
         }
 
         return {
-            init: function() {
+            init: function(playFunc) {
                 attachUIListeners();
+                UIController.attachPlayButtonClickListener(playFunc);
+                UIController.attachMnemonicButtonClickListener();
                 this.clear();
             },
             clear: function() {
@@ -57,6 +60,14 @@ var App = (function() {
             attachPlayButtonClickListener: function(func) {
                 $playButton.click(func);
             },
+            attachMnemonicButtonClickListener: function() {
+                $copymnemonic.click(function() {
+                    var copyText = document.getElementById("mnemonic");
+                    copyText.select();
+
+                    document.execCommand("Copy");
+                });
+            },
             getUserChoice: function() {
                 return $('#rps-choice input:radio:checked').val();
             },
@@ -68,6 +79,9 @@ var App = (function() {
             },
             loss: function(){
                 alert("You Lost.. Better luck next time.");
+            },
+            tie: function(){
+                alert("You Tied!! It could be worse :)");
             },
         }
     })();
@@ -82,9 +96,17 @@ var App = (function() {
 
         function timeout() {
             setTimeout(function() {
-                if (!App.checkForPlayerJoined() || !App.checkForPlayerReveal()) {
-                    timeout();
+                switch (mode) {
+                    case GameController.modes().WAITING:
+                        App.checkForPlayerJoined();
+                        break;
+                    case GameController.modes().WAITING_REVEAL:
+                        App.checkForPlayerReveal()
+                        break;
+                    default:
+
                 }
+                timeout();
             }, 20 * SECONDS);
         }
 
@@ -118,7 +140,22 @@ var App = (function() {
                     default:
 
                 }
-            }
+            },
+            checkResult: function(result){
+                if (result === web3.eth.accounts[0]) {
+                    UIController.win();
+                    GameController.setMode(GameController.modes().ENDGAME);
+                } else if (result === '0x0000000000000000000000000000000000000000') {
+                    GameController.setMode(GameController.modes().WAITING_REVEAL);
+                } else if (result === '0x0000000000000000000000000000000000000001') {
+                    UIController.tie();
+                    GameController.setMode(GameController.modes().ENDGAME);
+                }
+                else {
+                    UIController.loss();
+                    GameController.setMode(GameController.modes().ENDGAME);
+                }
+            },
         }
     })();
 
@@ -130,16 +167,6 @@ var App = (function() {
     function debug(str) {
         if (debug_mode) {
             console.log(str);
-        }
-    }
-
-    function checkResult(result){
-        if (result === web3.eth.accounts[0]) {
-            UIController.win();
-            GameController.setMode(GameController.modes().ENDGAME);
-        } else if (result === '0x0000000000000000000000000000000000000000') {
-            UIController.loss();
-            GameController.setMode(GameController.modes().ENDGAME);
         }
     }
 
@@ -207,24 +234,33 @@ var App = (function() {
                         user = UIController.getUsername();
                         choice = UIController.getUserChoice();
                         pass = web3.sha3(UIController.getPassword() + choice);
+                        console.log("User: " + user + ", Choice: " + choice + ", Pass: " + pass);
                         return instance.play(pass, user, {from: web3.eth.accounts[0],value: web3.toWei(UIController.getAmount(), 'ether')});
                     },
                     callback: function(result){
-                        for (var i = 0; i < result.logs.length; i++) {
-                            var log = result.logs[i];
-                            switch (log.event) {
-                                case "GameKeyReveal":
-                                    alert("Joined Existing Game.");
-                                    GameController.setMode(GameController.modes().REVEAL);
-                                    break;
-                                case "GameSessionCreated":
-                                    alert("Created New Game.");
-
-                                    GameController.setMode(GameController.modes().WAITING);
-                                    break;
-                                default:
-                            }
-                          }
+                        // var notFound = true;
+                        // checkevents:
+                        // for (var i = 0; i < result.logs.length; i++) {
+                        //     var log = result.logs[i];
+                        //     switch (log.event) {
+                        //         case "GameKeyReveal":
+                        //             alert("Joined Existing Game.");
+                        //             GameController.setMode(GameController.modes().REVEAL);
+                        //             notFound = false;
+                        //             break checkevents;
+                        //         case "GameSessionCreated":
+                        //             alert("Created New Game.");
+                        //
+                        //             GameController.setMode(GameController.modes().WAITING);
+                        //             notFound = false;
+                        //             break checkevents;
+                        //         default:
+                        //     }
+                        //   }
+                          // if (notFound) {
+                          alert("Waiting for other player.");
+                          GameController.setMode(GameController.modes().WAITING);
+                          // }
                           debug(result);
                     }
                 }
@@ -244,20 +280,21 @@ var App = (function() {
                     return instance.reveal(pass, choice);
                 },
                 callback: function(result) {
+                    var notFound = true;
+                    checkevents:
                     for (var i = 0; i < result.logs.length; i++) {
                         var log = result.logs[i];
                         switch (log.event) {
                             case "GameSessionEnded":
-                                checkResult(log.args.winner);
+                                GameController.checkResult(log.args.winner);
                                 debug(log.event);
+                                notFound = false;
                                 break;
-                            case "WaitingForPlayer2":
-                                debug(log.event);
-                                GameController.setMode(GameController.modes().WAITING_REVEAL);
-                                break;
-                            default:
 
                         }
+                    }
+                    if (notFound) {
+                        GameController.setMode(GameController.modes().WAITING_REVEAL);
                     }
                     debug(result);
                 }
@@ -285,7 +322,6 @@ var App = (function() {
                 App.callContract(dbg, funcs);
                 return GameController.getMode() != GameController.modes().WAITING;
             }
-            return false;
         },
         checkForPlayerReveal: function() {
             if (GameController.getMode() == GameController.modes().WAITING_REVEAL) {
@@ -298,17 +334,16 @@ var App = (function() {
                         return instance.getCurrentGameWinner();
                     },
                     callback: function(result) {
-                        checkResult(result[0].c[0]);
+                        console.log(result);
+                        GameController.checkResult(result);
                     }
                 }
                 App.callContract(dbg, funcs);
                 return GameController.getMode() != GameController.modes().WAITING_REVEAL;
             }
-            return false;
         },
         bindEvents: function() {
-            UIController.init();
-            UIController.attachPlayButtonClickListener(this.play);
+            UIController.init(this.play);
             var dbg = {
                 M1: "Initializing event listeners..",
                 M2: "Initialized..",
