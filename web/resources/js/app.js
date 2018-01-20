@@ -62,7 +62,13 @@ var App = (function() {
             },
             triggerModal: function(){
                 $('#gameResultModal').modal('show');
-            }
+            },
+            win: function(){
+                alert("You Won!");
+            },
+            loss: function(){
+                alert("You Lost.. Better luck next time.");
+            },
         }
     })();
 
@@ -76,7 +82,7 @@ var App = (function() {
 
         function timeout() {
             setTimeout(function() {
-                if (!App.checkForPlayerJoined()) {
+                if (!App.checkForPlayerJoined() || !App.checkForPlayerReveal()) {
                     timeout();
                 }
             }, 20 * SECONDS);
@@ -88,6 +94,8 @@ var App = (function() {
                     IDLE:0,
                     WAITING:1,
                     REVEAL:2,
+                    WAITING_REVEAL: 3,
+                    ENDGAME: 4
                 }
             },
             getMode: function(){
@@ -95,11 +103,20 @@ var App = (function() {
             },
             setMode: function(val){
                 mode = val;
-                if (mode == GameController.modes().WAITING) {
-                    timeout();
-                }
-                else if (mode == GameController.modes().REVEAL) {
-                    App.reveal();
+                switch (mode) {
+                    case GameController.modes().WAITING:
+                    case GameController.modes().WAITING_REVEAL:
+                        timeout();
+                        break;
+                    case GameController.modes().REVEAL:
+                        App.reveal();
+                        break;
+                    case GameController.modes().ENDGAME:
+                        UIController.clear();
+                        setMode(GameController.modes().IDLE);
+                        break;
+                    default:
+
                 }
             }
         }
@@ -113,6 +130,16 @@ var App = (function() {
     function debug(str) {
         if (debug_mode) {
             console.log(str);
+        }
+    }
+
+    function checkResult(result){
+        if (result === web3.eth.accounts[0]) {
+            UIController.win();
+            GameController.setMode(GameController.modes().ENDGAME);
+        } else if (result === '0x0000000000000000000000000000000000000000') {
+            UIController.loss();
+            GameController.setMode(GameController.modes().ENDGAME);
         }
     }
 
@@ -185,7 +212,6 @@ var App = (function() {
                     callback: function(result){
                         for (var i = 0; i < result.logs.length; i++) {
                             var log = result.logs[i];
-
                             switch (log.event) {
                                 case "GameKeyReveal":
                                     alert("Joined Existing Game.");
@@ -193,17 +219,15 @@ var App = (function() {
                                     break;
                                 case "GameSessionCreated":
                                     alert("Created New Game.");
-                                    debugger;
+
                                     GameController.setMode(GameController.modes().WAITING);
                                     break;
                                 default:
-
                             }
                           }
                           debug(result);
                     }
                 }
-
                 App.callContract(dbg, funcs);
             }
         },
@@ -224,8 +248,12 @@ var App = (function() {
                         var log = result.logs[i];
                         switch (log.event) {
                             case "GameSessionEnded":
-                                alert("Game has Ended");
+                                checkResult(log.args.winner);
                                 debug(log.event);
+                                break;
+                            case "WaitingForPlayer2":
+                                debug(log.event);
+                                GameController.setMode(GameController.modes().WAITING_REVEAL);
                                 break;
                             default:
 
@@ -248,18 +276,35 @@ var App = (function() {
                     },
                     callback: function(result) {
                         debug(result);
-                        debugger;
+
                         if (result[1].c[0] === 3) {
                             GameController.setMode(GameController.modes().REVEAL);
-                            return true;
-                        }
-                        else {
-                            return false;
                         }
                     }
                 }
                 App.callContract(dbg, funcs);
+                return GameController.getMode() != GameController.modes().WAITING;
             }
+            return false;
+        },
+        checkForPlayerReveal: function() {
+            if (GameController.getMode() == GameController.modes().WAITING_REVEAL) {
+                var dbg = {
+                    M1: "Waiting On Player Two",
+                    M2: "Received Result: ",
+                }
+                var funcs = {
+                    call: function(instance) {
+                        return instance.getCurrentGameWinner();
+                    },
+                    callback: function(result) {
+                        checkResult(result[0].c[0]);
+                    }
+                }
+                App.callContract(dbg, funcs);
+                return GameController.getMode() != GameController.modes().WAITING_REVEAL;
+            }
+            return false;
         },
         bindEvents: function() {
             UIController.init();
