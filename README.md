@@ -5,6 +5,8 @@ Solidity Project: Rock Paper Scissor
 Design Doc:
 https://docs.google.com/document/d/1RRbkEhIYmv3_99PLF7QD1vq7gM8kdl7iUm1kWtKam14/edit
 
+Testing Plan:
+https://docs.google.com/spreadsheets/d/1r3rQv7ssFWcGTnqlskazQkpXSXNEWVc456izbZJ7wnE/edit?usp=sharing
 
 Steps remaining in version 1
 1. Timeout on games for withdrawing funds ( So they aren't stuck )
@@ -12,7 +14,6 @@ Steps remaining in version 1
 	A. Play -> wait - > Reveal
 	B. Reveal -> wait -> Winner/Loser
 	C. Winner/Loser -> Re-Play
-
 
 Ideas for version 2
 
