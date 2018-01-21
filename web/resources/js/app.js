@@ -90,12 +90,10 @@ var App = (function() {
         'use strict';
         const SECONDS = 1000;
         var mode = 0;
-        var user;
-        var choice;
-        var pass;
+        var user, choice, pass, timer;
 
         function timeout() {
-            setTimeout(function() {
+            timer = window.setTimeout(function() {
                 switch (mode) {
                     case GameController.modes().WAITING:
                         App.checkForPlayerJoined();
@@ -146,6 +144,7 @@ var App = (function() {
                     UIController.win();
                     GameController.setMode(GameController.modes().ENDGAME);
                 } else if (result === '0x0000000000000000000000000000000000000000') {
+                    window.clearTimeout(timer);
                     GameController.setMode(GameController.modes().WAITING_REVEAL);
                 } else if (result === '0x0000000000000000000000000000000000000001') {
                     UIController.tie();
