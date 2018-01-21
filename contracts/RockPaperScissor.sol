@@ -21,17 +21,8 @@ contract RockPaperScissor is TurnBasedGame {
 		return gamesPlayed;
 	}
 
-	function fireEvents() public {
-		GameSessionCreated(1234);
-	    GameKeyReveal(4321);
-	    GameSessionEnded(address(0), 2000000000000000000);
-	    CheckPoint(404);
-	    RevealValidTime(now);
-	}
-
 	function play(bytes32 _encryptedOption, string _name) public payable returns (uint ret) {
 	    //check user only send 0.1 ETH or have at least 0.1ETH in the balance. Also check user send encryptedOption
-		CheckPoint(1); // Made it into the function
 		Game memory check_game = getGame();
 		require(check_game.gameState == 4 || check_game.gameState == 0);
 		require(msg.value==100000000000000000 || Balance[msg.sender] > 1000000000000000000);
@@ -59,12 +50,10 @@ contract RockPaperScissor is TurnBasedGame {
 		    //Both players already submit their option, move to gameState 3 to request key to reveal
 		    gameIdToGame[id].gameState = 3;
 		    //send event to notify user to call reveal()
-		    GameKeyReveal(id);
+		    GameJoined(id, now + 30 minutes);
 		    //record valid time for reveal
 		    gameIdToGame[id].validTime = (now + 30 minutes);
 
-		    //send event request user to reply within this time
-		    RevealValidTime(now + 30 minutes);
             return 2;
 		}
 		//if no avaliable game to join, start a fresh game and add that to unmatchGame list
@@ -90,25 +79,21 @@ contract RockPaperScissor is TurnBasedGame {
         else if(_option==uint(3)) tempStringOption="3";
         else{
         	_DefaultLose(msg.sender);
-        	CheckPoint(1);
         }
 
         //check if they key is valid, it key is not valid, default lose
         if(keccak256(_key,tempStringOption)!=OptionList[msg.sender].encryptedOption){
          	_DefaultLose(msg.sender);
-        	CheckPoint(2);
 		}
 
 
         //if your oponent did not reveal within the time frame
         else if(now>current_game.validTime){
         	_DefaultWin(msg.sender);
-        	CheckPoint(3);
         }
 
         //check if both player reveal their key
         else if((stringToBytes32(OptionList[current_game.players[0].player].key) != 0x0)&&(stringToBytes32(OptionList[current_game.players[1].player].key) != 0x0)){
-        	CheckPoint(4);
             UnlockedValid = true;
             OptionList[msg.sender].option = intToOption(_option);
             //determine playerOne and playerTwo address
@@ -117,8 +102,7 @@ contract RockPaperScissor is TurnBasedGame {
         }
         // if both player option is unlock and valid, execute the game
 	    if(UnlockedValid){
-	    	CheckPoint(5);
-	    	ExeuteRockPaperScissor();
+	    	exeuteRockPaperScissor();
 	    }
 		else{
 			WaitingForPlayer2(true);
@@ -128,7 +112,7 @@ contract RockPaperScissor is TurnBasedGame {
 
 
     // execute the game after we decode both player option
-    function ExeuteRockPaperScissor() private {
+    function exeuteRockPaperScissor() private {
         Game storage game = getGame();
 
 	    address player_one = game.players[0].player;
