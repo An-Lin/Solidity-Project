@@ -140,11 +140,11 @@ var App = (function() {
                 }
             },
             checkResult: function(result){
+                window.clearTimeout(timer);
                 if (result === web3.eth.accounts[0]) {
                     UIController.win();
                     GameController.setMode(GameController.modes().ENDGAME);
                 } else if (result === '0x0000000000000000000000000000000000000000') {
-                    window.clearTimeout(timer);
                     GameController.setMode(GameController.modes().WAITING_REVEAL);
                 } else if (result === '0x0000000000000000000000000000000000000001') {
                     UIController.tie();
@@ -267,39 +267,46 @@ var App = (function() {
             }
         },
         reveal: function() {
-        if (GameController.getMode() == GameController.modes().REVEAL) {
-            var dbg = {
-                M1: "Revealing hand..",
-                M2: "Received Result: ",
-            }
-            var funcs = {
-                call: function(instance) {
-                    choice = UIController.getUserChoice();
-                    pass = UIController.getPassword();
-                    return instance.reveal(pass, choice);
-                },
-                callback: function(result) {
-                    var notFound = true;
-                    checkevents:
-                    for (var i = 0; i < result.logs.length; i++) {
-                        var log = result.logs[i];
-                        switch (log.event) {
-                            case "GameSessionEnded":
-                                GameController.checkResult(log.args.winner);
-                                debug(log.event);
-                                notFound = false;
-                                break;
+            if (GameController.getMode() == GameController.modes().REVEAL) {
+                var dbg = {
+                    M1: "Revealing hand..",
+                    M2: "Received Result: ",
+                }
+                var funcs = {
+                    call: function(instance) {
+                        choice = UIController.getUserChoice();
+                        pass = UIController.getPassword();
+                        return instance.reveal(pass, choice);
+                    },
+                    callback: function(result) {
+                        if (result.receipt.status === "0x00") {
+                            alert("Reveal TX has failed.");
+                            GameController.setMode(GameController.modes().REVEAL);
+                        }
+                        else{
+                            var notFound = true;
+                            checkevents:
+                            for (var i = 0; i < result.logs.length; i++) {
+                                var log = result.logs[i];
+                                switch (log.event) {
+                                    case "GameSessionEnded":
+                                    GameController.checkResult(log.args.winner);
+                                    debug(log.event);
+                                    notFound = false;
+                                    break;
 
+                                }
+                            }
+                            if (notFound) {
+                                GameController.setMode(GameController.modes().WAITING_REVEAL);
+                            }
+                            debug(result);
                         }
                     }
-                    if (notFound) {
-                        GameController.setMode(GameController.modes().WAITING_REVEAL);
-                    }
-                    debug(result);
                 }
+                App.callContract(dbg, funcs);
             }
-            App.callContract(dbg, funcs);
-        }},
+        },
         checkForPlayerJoined: function() {
             if (GameController.getMode() == GameController.modes().WAITING) {
                 var dbg = {
