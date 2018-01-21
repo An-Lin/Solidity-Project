@@ -11,10 +11,9 @@ contract TurnBasedGame {
     }
 
     event GameSessionCreated(uint gameId);
-    event GameKeyReveal(uint gameId);
+    event GameJoined(uint gameId, uint time);
     event GameSessionEnded(address winner, uint gameJackPot);
     event CheckPoint(uint error);
-    event RevealValidTime(uint time);
     event WaitingForPlayer2(bool waiting);
 
 
